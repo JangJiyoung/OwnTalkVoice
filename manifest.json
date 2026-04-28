@@ -1,6 +1,7 @@
 {
   "short_name": "OwnTalk",
   "name": "English Learning App",
+  "description": "Adult English Speaking and Pronunciation Learning App",
   "icons": [
     {
       "src": "icon.png",
@@ -12,10 +13,17 @@
       "src": "icon_512.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "start_url": "https://jangjiyoung.github.io/OwnTalk/",
+  "start_url": "/OwnTalk/",
+  "scope": "/OwnTalk/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
