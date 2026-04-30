@@ -49,7 +49,7 @@
         .app-container { width: 100%; max-width: 450px; background: var(--bg); position: relative; display: flex; flex-direction: column; height: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
 
         #splashScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease-out; }
-        #splashLogo { width: 100px; height: 100px; border-radius: 24px; animation: scaleUpLogo 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        #splashVideo { width: 180px; height: auto; outline: none; border: none; }
         @keyframes scaleUpLogo { 0% { transform: scale(0.8); opacity: 0; } 20% { opacity: 1; } 100% { transform: scale(2); opacity: 1; } }
 
         .top-bar { padding: 15px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eaeaea; flex-shrink: 0; }
@@ -255,7 +255,7 @@
 <body>
 
 <div class="app-container">
-    <div id="splashScreen"><img src="icon.png" alt="App Logo" id="splashLogo"></div>
+    <div id="splashScreen"><video id="splashVideo" src="splash.mp4" autoplay muted playsinline></video></div>
     <div id="toastOverlay" class="toast-overlay"><div id="toastMessage" class="toast-box">알림 메시지</div></div>
 
     <div class="top-bar">
@@ -365,6 +365,7 @@
             <div class="modal-body">
                 <div class="setting-category">재생 옵션</div>
                 <div class="setting-row"><span>문장 Random 재생</span><label class="switch"><input type="checkbox" id="setRandom"><span class="slider"></span></label></div>
+                <div class="setting-row"><span>중요도 우선모드</span><label class="switch"><input type="checkbox" id="setPriority"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>원어민 내 저장음성 우선모드</span><label class="switch"><input type="checkbox" id="setUseSavedVoice"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>원어민 발음 먼저 듣기</span><label class="switch"><input type="checkbox" id="setNativeFirst" checked><span class="slider"></span></label></div>
                 <div class="setting-row"><span>자동 문장 넘김</span><label class="switch"><input type="checkbox" id="setAutoNext"><span class="slider"></span></label></div>
@@ -522,6 +523,7 @@
         
         if (s) {
             document.getElementById('setRandom').checked = s.random; 
+            document.getElementById('setPriority').checked = s.priorityMode || false;
             document.getElementById('setUseSavedVoice').checked = s.useSavedVoice === undefined ? false : s.useSavedVoice;
             document.getElementById('setNativeFirst').checked = s.nativeFirst;
             document.getElementById('setAutoNext').checked = s.autoNext; 
@@ -529,8 +531,10 @@
             document.getElementById('setLimit').value = s.limit; document.getElementById('limitVal').innerText = s.limit;
             document.getElementById('setWaitTime').value = s.waitTime; document.getElementById('waitVal').innerText = s.waitTime; 
             waitSeconds = s.waitTime;
+            
             if (s.lastStudyId && !s.random) {
                 let temp = [...rawSentences].reverse().filter(r => !r.isMemorized);
+                if (s.priorityMode) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
                 let idx = temp.findIndex(r => r.id === s.lastStudyId);
                 if (idx !== -1) { studyOffset = idx; resumeOffset = true; }
             }
@@ -566,6 +570,7 @@
         await db.settings.put({ 
             id: 1, 
             random: document.getElementById('setRandom').checked, 
+            priorityMode: document.getElementById('setPriority').checked,
             useSavedVoice: document.getElementById('setUseSavedVoice').checked, 
             nativeFirst: document.getElementById('setNativeFirst').checked, 
             autoNext: document.getElementById('setAutoNext').checked, 
@@ -635,6 +640,8 @@
         }
         
         let temp = [...rawSentences].reverse().filter(r => !r.isMemorized); 
+        if (document.getElementById('setPriority').checked) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
+        
         let idx = temp.findIndex(r => r.id === targetId);
         
         if (idx !== -1) { 
@@ -692,12 +699,16 @@
         
         let temp = [...rawSentences].reverse().filter(s => !s.isMemorized); 
         const limit = parseInt(document.getElementById('setLimit').value) || 20;
+
+        const isRandom = document.getElementById('setRandom').checked;
+        const isPriority = document.getElementById('setPriority').checked;
+
+        if (isRandom) temp.sort(() => Math.random() - 0.5); 
+        if (isPriority) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
         
-        if (document.getElementById('setRandom').checked) { 
-            temp.sort(() => Math.random() - 0.5); 
+        if (isRandom) {
             studySentences = temp.slice(0, limit); 
-        } 
-        else {
+        } else {
             if (studyOffset >= temp.length && temp.length > 0) studyOffset = studyOffset % temp.length; 
             studySentences = temp.slice(studyOffset, studyOffset + limit);
             
@@ -708,7 +719,7 @@
         }
         
         currentIndex = 0; 
-        if (studySentences.length > 0 && !document.getElementById('setRandom').checked) { 
+        if (studySentences.length > 0 && !isRandom) { 
             try { await db.settings.update(1, { lastStudyId: studySentences[0].id }); } 
             catch(e) { await saveSettingsToDB(); } 
         }
