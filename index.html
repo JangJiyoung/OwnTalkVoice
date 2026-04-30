@@ -51,7 +51,7 @@
         #splashScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease-out; }
         
         #splashLogo { 
-            width: 20%; /* 화면 너비의 1/5 크기로 시작 */
+            width: 20%; 
             height: auto; 
             border-radius: 24px; 
             animation: scaleUpLogo 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
@@ -59,7 +59,7 @@
         @keyframes scaleUpLogo { 
             0% { transform: scale(1); opacity: 0; } 
             20% { opacity: 1; } 
-            100% { transform: scale(2); opacity: 1; } /* 2배 확대되어 화면의 2/5 크기가 됨 */
+            100% { transform: scale(2); opacity: 1; } 
         }
 
         .top-bar { padding: 15px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid #eaeaea; flex-shrink: 0; }
@@ -175,7 +175,11 @@
         .sentence-card.swiping { background-color: #eef5fc; transform: scale(1); }
         .sentence-card strong { display: block; font-size: 16px; color: #222; margin-bottom: 8px; line-height: 1.4; pointer-events: none; }
         .list-kor { display: block; font-size: 14px; color: #666; line-height: 1.4; word-break: keep-all; pointer-events: none; }
-        .list-kor.hidden { display: none; }
+        
+        /* 추가된 리스트 내 텍스트 숨김 처리 클래스 */
+        .sentence-card .list-eng.hidden { display: none !important; }
+        .sentence-card .list-kor.hidden { display: none !important; }
+        
         .fab { position: absolute; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4); border: none; cursor: pointer; z-index: 20; }
 
         .toast-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; z-index: 500; pointer-events: none; }
@@ -323,8 +327,11 @@
         <div class="list-header">
             <h4 style="margin:0; font-size:18px; color:#222;">나의 문장 목록</h4>
             <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:24px; line-height:26px;">🇰🇷</span>
-                <label class="switch"><input type="checkbox" id="listKorSwitch" checked onchange="toggleKor('list', this)"><span class="slider"></span></label>
+                <span style="font-size:24px; line-height:26px;">🇺🇸</span>
+                <label class="switch"><input type="checkbox" id="listEngSwitch" checked onchange="toggleListLang('eng')"><span class="slider"></span></label>
+                
+                <span style="display:inline-block; width: 16px;"></span> <span style="font-size:24px; line-height:26px;">🇰🇷</span>
+                <label class="switch"><input type="checkbox" id="listKorSwitch" checked onchange="toggleListLang('kor')"><span class="slider"></span></label>
             </div>
         </div>
         <div id="sentenceList"></div>
@@ -598,13 +605,19 @@
         showToast(!currentVal ? "암기 문장에서 제외되었습니다." : "다시 학습 문장에 포함됩니다.");
     }
 
+    // 변경된 리스트 렌더링 (영어 숨김용 클래스 list-eng 추가)
     function renderList() {
         const container = document.getElementById('sentenceList'); container.innerHTML = '';
+        const isEngVisible = document.getElementById('listEngSwitch').checked;
         const isKorVisible = document.getElementById('listKorSwitch').checked;
+        
         [...rawSentences].reverse().forEach((s) => {
             const div = document.createElement('div'); div.className = 'sentence-card'; 
             div.innerHTML = `
-                <div style="flex: 1; overflow: hidden;"><strong>${s.eng}</strong><span class="list-kor ${isKorVisible ? '' : 'hidden'}">${s.kor}</span></div>
+                <div style="flex: 1; overflow: hidden;">
+                    <strong class="list-eng ${isEngVisible ? '' : 'hidden'}">${s.eng}</strong>
+                    <span class="list-kor ${isKorVisible ? '' : 'hidden'}">${s.kor}</span>
+                </div>
                 <div class="toggle-area" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-left: 15px; border-left: 1px solid #f0f0f0; min-width: 55px;" onclick="toggleMemorized(${s.id}, ${s.isMemorized || false}, event)">
                     <span style="font-size: 11px; font-weight: bold; color: ${s.isMemorized ? 'var(--primary)' : '#bbb'};">암기완료</span>
                     <label class="switch" style="pointer-events: none; transform: scale(0.8); transform-origin: center;"><input type="checkbox" ${s.isMemorized ? 'checked' : ''}><span class="slider"></span></label>
@@ -827,7 +840,8 @@
 
     function toggleEng() { document.getElementById('displayEng').classList.toggle('hidden'); if(document.getElementById('displayEng').classList.contains('hidden')) document.getElementById('displayKor').classList.remove('hidden'); updateToggleButtonsUI(); }
     
-    function toggleKor(target, check = null) {
+    // 수정된 토글 컨트롤: '연습' 탭 전용으로 분리
+    function toggleKor(target) {
         if(target === 'study') { 
             if(!document.getElementById('displayEng').classList.contains('hidden')) {
                 const k = document.getElementById('displayKor'); k.classList.toggle('hidden');
@@ -842,8 +856,30 @@
                     cancelAnimationFrame(visualizerAnimationId); 
                 }
             }
-        } else if (check) document.querySelectorAll('.list-kor').forEach(el => el.classList.toggle('hidden', !check.checked));
+        }
         updateToggleButtonsUI();
+    }
+
+    // 새롭게 추가된 '리스트' 전용 언어 가리기 함수 (동시 가림 방지 로직 포함)
+    function toggleListLang(changedLang) {
+        const engSwitch = document.getElementById('listEngSwitch');
+        const korSwitch = document.getElementById('listKorSwitch');
+
+        // 둘 다 꺼지는 것을 방지하는 로직
+        if (!engSwitch.checked && !korSwitch.checked) {
+            if (changedLang === 'eng') {
+                korSwitch.checked = true; // 영어를 껐다면 한글을 강제로 켬
+            } else {
+                engSwitch.checked = true; // 한글을 껐다면 영어를 강제로 켬
+            }
+            showToast("영어와 한글을 동시에 가릴 수 없습니다.");
+        }
+
+        const isEngVisible = engSwitch.checked;
+        const isKorVisible = korSwitch.checked;
+
+        document.querySelectorAll('.list-eng').forEach(el => el.classList.toggle('hidden', !isEngVisible));
+        document.querySelectorAll('.list-kor').forEach(el => el.classList.toggle('hidden', !isKorVisible));
     }
 
     function toggleWaveform() {
