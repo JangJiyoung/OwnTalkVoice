@@ -481,11 +481,14 @@
         toastTimer = setTimeout(() => { overlay.classList.remove('active'); }, 1500);
     }
 
+    // 수정된 getSupportedMimeType
     function getSupportedMimeType() {
-        if (!window.MediaRecorder) return 'audio/wav';
-        const types = ['audio/mp4', 'audio/aac', 'audio/wav'];
-        for (const type of types) if (MediaRecorder.isTypeSupported(type)) return type;
-        return 'audio/wav';
+        if (!window.MediaRecorder) return '';
+        const types = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/aac'];
+        for (const type of types) {
+            if (MediaRecorder.isTypeSupported(type)) return type;
+        }
+        return ''; 
     }
 
     async function init() {
@@ -564,7 +567,6 @@
         showToast(!currentVal ? "암기 문장에서 제외되었습니다." : "다시 학습 문장에 포함됩니다.");
     }
 
-    // 확대 클래스가 적용될 수 있도록 렌더링 함수 수정
     function renderList() {
         const container = document.getElementById('sentenceList'); container.innerHTML = '';
         const isEngVisible = document.getElementById('listEngSwitch').checked;
@@ -819,7 +821,6 @@
         updateToggleButtonsUI();
     }
 
-    // 확대 클래스가 적용되도록 기능 수정
     function toggleListLang(changedLang) {
         const engSwitch = document.getElementById('listEngSwitch');
         const korSwitch = document.getElementById('listKorSwitch');
@@ -832,12 +833,12 @@
 
         const isEngVisible = engSwitch.checked;
         const isKorVisible = korSwitch.checked;
-        const enlargeKor = !isEngVisible && isKorVisible; // 영어가 꺼지고 한글만 보일 때 true
+        const enlargeKor = !isEngVisible && isKorVisible; 
 
         document.querySelectorAll('.list-eng').forEach(el => el.classList.toggle('hidden', !isEngVisible));
         document.querySelectorAll('.list-kor').forEach(el => {
             el.classList.toggle('hidden', !isKorVisible);
-            el.classList.toggle('enlarged', enlargeKor); // 한글만 보일 때 확대 클래스 토글
+            el.classList.toggle('enlarged', enlargeKor); 
         });
     }
 
@@ -1013,6 +1014,7 @@
         }
     }
 
+    // 수정된 toggleRecord
     async function toggleRecord() {
         const isStopping = mediaRecorder && mediaRecorder.state === "recording";
         stopAllAudio();
@@ -1040,12 +1042,13 @@
                 }
 
                 const mimeType = getSupportedMimeType();
-                mediaRecorder = new MediaRecorder(audioStream, { mimeType }); 
+                const options = mimeType ? { mimeType: mimeType } : {};
+                mediaRecorder = new MediaRecorder(audioStream, options); 
                 audioChunks = [];
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
 
                 mediaRecorder.onstop = async () => { 
-                    recordedBlob = new Blob(audioChunks, { type: mimeType });
+                    recordedBlob = new Blob(audioChunks, { type: mimeType || 'audio/webm' });
                     
                     let nativeSilenceSec = 0.05;
                     if (nativeAudioBuffer) {
@@ -1070,9 +1073,11 @@
                     else isActionPaused = false; 
                 };
                 
-                mediaRecorder.start(); btn.classList.add('recording');
+                mediaRecorder.start(); 
+                btn.classList.add('recording'); 
             } catch(e) { 
-                showToast("마이크 권한이 필요합니다."); 
+                showToast("마이크 권한이 없거나 브라우저가 녹음을 지원하지 않습니다."); 
+                console.error("Recording error: ", e);
                 remainingTime = waitSeconds;
                 isActionPaused = false; 
             } 
