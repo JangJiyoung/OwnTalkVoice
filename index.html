@@ -124,37 +124,12 @@
             pointer-events: none;
         }
 
-        .playback-row { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 25px; 
-            margin-bottom: 25px; 
-        }
-        
+        .playback-row { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 25px; }
         .btn-side { width: 60px; height: 60px; border-radius: 50%; border: none; background: #f4f6f8; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-main { width: 75px; height: 75px; border-radius: 50%; border: none; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4); cursor: pointer; }
         
-        .mode-row { 
-            display: flex; 
-            justify-content: space-evenly; 
-            border-top: 1px solid #f0f0f0; 
-            padding-top: 25px; 
-        }
-
-        .mode-btn { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 8px; 
-            background: none; 
-            border: none; 
-            cursor: pointer; 
-            color: #777; 
-            font-size: 14px; 
-            font-weight: 600; 
-            width: 60px; 
-        }
+        .mode-row { display: flex; justify-content: space-evenly; border-top: 1px solid #f0f0f0; padding-top: 25px; }
+        .mode-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; color: #777; font-size: 14px; font-weight: 600; width: 60px; }
         .mode-icon { width: 50px; height: 50px; border-radius: 50%; background: #f4f6f8; display: flex; justify-content: center; align-items: center; color: var(--primary); transition: 0.3s; }
 
          /* 버튼 작동 애니메이션 */
@@ -168,16 +143,14 @@
 
         #listContent { overflow: hidden; }
         .list-header { background: var(--bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; flex-shrink: 0; }
-        #sentenceList { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 90px; }
         
         .sentence-card { background: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid transparent; touch-action: pan-y; cursor: pointer; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s, border-color 0.2s; }
         .sentence-card:active { transform: scale(0.98); background-color: #fafafa; border-color: #e0e0e0; }
         .sentence-card.swiping { background-color: #eef5fc; transform: scale(1); }
         .sentence-card strong { display: block; font-size: 16px; color: #222; margin-bottom: 8px; line-height: 1.4; pointer-events: none; }
         
-        /* 한글 텍스트 기본 및 확대 트랜지션 설정 */
         .list-kor { display: block; font-size: 14px; color: #666; line-height: 1.4; word-break: keep-all; pointer-events: none; transition: font-size 0.2s, color 0.2s; }
-        .list-kor.enlarged { font-size: 17px; color: #333; margin-top: 4px; } /* 1.2배 크기 적용 및 색상 진하게 */
+        .list-kor.enlarged { font-size: 17px; color: #333; margin-top: 4px; }
         
         .sentence-card .list-eng.hidden { display: none !important; }
         .sentence-card .list-kor.hidden { display: none !important; }
@@ -219,8 +192,8 @@
         input[type=range] { -webkit-appearance: none; width: 130px; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary); cursor: pointer; margin-top: -8px; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; }
-        .setting- { font-size: 17px; font-weight: bold; color: var(--primary); margin: 25px 0 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
-        .setting-:first-of-type { margin-top: 5px; } 
+        .setting-category { font-size: 17px; font-weight: bold; color: var(--primary); margin: 25px 0 15px; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
+        .setting-category:first-of-type { margin-top: 5px; } 
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; font-size: 18px; font-weight: 500; }
 
         .system-popup { width: 85%; max-width: 320px; background: #ffffff; border-radius: 24px; padding: 30px 20px 15px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; }
@@ -230,10 +203,10 @@
         .system-popup-btn:active { background-color: #f0f0f0; }
         .system-popup-btn.deny { color: #555; }
 
-        /* 클라우드 카테고리 리스트용 스타일 추가 */
+        /* 클라우드 카테고리 리스트용 스타일 (모바일 잔상 방지 !important 추가) */
         .cloud-cat-btn { padding: 14px 16px; border: 1px solid #ddd; background: #fff; border-radius: 12px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; color: #333; margin-bottom: 8px; font-weight: 500; display: block; width: 100%; box-sizing: border-box; }
         .cloud-cat-btn:active { transform: scale(0.98); }
-        .cloud-cat-btn.selected { background: #eef5fc; border-color: var(--primary); color: var(--primary); font-weight: bold; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.15); }
+        .cloud-cat-btn.selected { background: #eef5fc !important; border-color: var(--primary) !important; color: var(--primary) !important; font-weight: bold; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.15); }
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         .loading-text { animation: pulse-text 1.5s infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -302,14 +275,25 @@
             <div style="display:flex; align-items:center; gap:8px;">
                 <span style="font-size:24px; line-height:26px;">🇺🇸</span>
                 <label class="switch"><input type="checkbox" id="listEngSwitch" checked onchange="toggleListLang('eng')"><span class="slider"></span></label>
-                
                 <span style="display:inline-block; width: 2px;"></span>
-                
                 <span style="font-size:24px; line-height:26px;">🇰🇷</span>
                 <label class="switch"><input type="checkbox" id="listKorSwitch" checked onchange="toggleListLang('kor')"><span class="slider"></span></label>
             </div>
         </div>
-        <div id="sentenceList"></div>
+        
+        <div class="modal-tabs" style="margin-bottom: 0; border-bottom: 1px solid #eaeaea; flex-shrink: 0; background: #fff; padding: 0 15px;">
+            <button class="m-tab-btn active" id="subTabBtnSentences" onclick="switchListSubTab('sentences')">문장단위목록</button>
+            <button class="m-tab-btn" id="subTabBtnCategories" onclick="switchListSubTab('categories')">카테고리목록</button>
+        </div>
+        
+        <div id="subTabSentences" class="m-tab-content active" style="flex: 1; overflow-y: auto;">
+            <div id="sentenceList" style="padding: 15px; padding-bottom: 90px;"></div>
+        </div>
+        
+        <div id="subTabCategories" class="m-tab-content" style="flex: 1; overflow-y: auto;">
+            <div id="categoryList" style="padding: 15px; padding-bottom: 90px;"></div>
+        </div>
+
         <button class="fab" onclick="openEditModal()">+</button>
     </div>
 
@@ -338,11 +322,12 @@
 
     <div id="swipeStartModal" class="overlay" style="z-index: 300;">
         <div class="modal" style="width: 80%; max-width: 320px; text-align: center;">
-            <div class="modal-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;"><span style="font-size: 18px; font-weight: bold; color: var(--primary);">시작문장으로 지정할까요</span></div>
+            <div class="modal-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;"><span style="font-size: 18px; font-weight: bold; color: var(--primary);">학습시작 문장으로 지정 할까요?</span></div>
             <div class="modal-body" style="color: #444; font-size: 15px; line-height: 1.5; padding: 15px 20px 25px;">
                 "<span id="swipeTargetEng" style="font-weight:bold; color:#222;"></span>"<br><br>
                 <span style="color:#888; font-size:13px;">(Random 재생 옵션이 자동으로 해제됩니다.)</span>
                 <input type="hidden" id="swipeTargetId">
+                <input type="hidden" id="swipeTargetType" value="sentence">
             </div>
             <div class="modal-footer" style="display: flex; flex-direction: row; gap: 10px; padding-top: 0;">
                 <button class="btn-del" style="flex: 1; background: #f4f6f8; color: #555; border: none; padding: 14px; font-size: 15px;" onclick="closeOverlay('swipeStartModal')">취소</button>
@@ -355,14 +340,14 @@
         <div class="modal">
             <div class="modal-header">환경 설정 <button class="btn-x" onclick="closeOverlay('settingModal')">✕</button></div>
             <div class="modal-body">
-                <div class="setting-">재생 옵션</div>
+                <div class="setting-category">재생 옵션</div>
                 <div class="setting-row"><span>문장 Random 재생</span><label class="switch"><input type="checkbox" id="setRandom"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>중요도 우선모드</span><label class="switch"><input type="checkbox" id="setPriority"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>원어민 내 저장음성 우선모드</span><label class="switch"><input type="checkbox" id="setUseSavedVoice"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>원어민 발음 먼저 듣기</span><label class="switch"><input type="checkbox" id="setNativeFirst" checked><span class="slider"></span></label></div>
                 <div class="setting-row"><span>자동 문장 넘김</span><label class="switch"><input type="checkbox" id="setAutoNext"><span class="slider"></span></label></div>
                 <div class="setting-row"><span>내 녹음 바로 재생</span><label class="switch"><input type="checkbox" id="setAutoPlayRec" checked><span class="slider"></span></label></div>
-                <div class="setting-">학습 환경</div>
+                <div class="setting-category">학습 환경</div>
                 <div class="setting-row"><span>학습 문장 수</span><div style="display:flex; align-items:center; gap:10px;"><input type="range" id="setLimit" min="5" max="100" step="5" value="20" oninput="document.getElementById('limitVal').innerText=this.value"><span id="limitVal" style="font-weight:bold; color:var(--primary); width:35px; text-align:right;">20</span></div></div>
                 <div class="setting-row"><span>대기 시간 (초)</span><div style="display:flex; align-items:center; gap:10px;"><input type="range" id="setWaitTime" min="1" max="10" step="1" value="3" oninput="document.getElementById('waitVal').innerText=this.value"><span id="waitVal" style="font-weight:bold; color:var(--primary); width:35px; text-align:right;">3</span></div></div>
             </div>
@@ -418,9 +403,7 @@
                     <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
                 </svg>
             </div>
-            <div class="system-popup-text">
-                AI English Study Pro에서 오디오를 녹음하도록 허용하시겠습니까?
-            </div>
+            <div class="system-popup-text">AI English Study Pro에서 오디오를 녹음하도록 허용하시겠습니까?</div>
             <button class="system-popup-btn" onclick="acceptMicGuide()">허용</button>
             <button class="system-popup-btn deny" onclick="closeOverlay('micGuideModal'); localStorage.setItem('initialPermissionFlowDone', 'true');">거부</button>
         </div>
@@ -433,72 +416,41 @@
 
     window.isNativeApp = navigator.userAgent.includes("wv") || navigator.userAgent.includes("iPhone");
 
-    function getCssColor(varName) {
-        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    }
+    function getCssColor(varName) { return getComputedStyle(document.documentElement).getPropertyValue(varName).trim(); }
 
     let ttsUnlocked = false;
     function unlockAudio() {
         if (ttsUnlocked) return;
-        if (window.speechSynthesis) {
-            const dummy = new SpeechSynthesisUtterance('');
-            dummy.volume = 0;
-            window.speechSynthesis.speak(dummy);
-        }
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-        else if (!audioCtx) initAudioContext();
+        if (window.speechSynthesis) { const dummy = new SpeechSynthesisUtterance(''); dummy.volume = 0; window.speechSynthesis.speak(dummy); }
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); else if (!audioCtx) initAudioContext();
         ttsUnlocked = true;
-        document.body.removeEventListener('click', unlockAudio);
-        document.body.removeEventListener('touchstart', unlockAudio);
+        document.body.removeEventListener('click', unlockAudio); document.body.removeEventListener('touchstart', unlockAudio);
     }
-    document.body.addEventListener('click', unlockAudio);
-    document.body.addEventListener('touchstart', unlockAudio, { passive: true });
+    document.body.addEventListener('click', unlockAudio); document.body.addEventListener('touchstart', unlockAudio, { passive: true });
 
-    // Dexie DB 설정 (category 필드 추가 버전 업데이트 포함)
+    // DB Init (버전 2)
     const db = new Dexie("EnglishStudyDB");
-    
-    // 버전 1: 기존 스키마 (업데이트 충돌 방지를 위해 그대로 유지)
     db.version(1).stores({ sentences: '++id, eng, kor, importance, isMemorized', settings: 'id, random, nativeFirst, autoNext, autoPlayRec, limit, waitTime' });
-    
-    // 버전 2: category 필드 추가 및 위치 변경
     db.version(2).stores({ sentences: '++id, category, eng, kor, importance, isMemorized' }).upgrade(tx => {
-        return tx.sentences.toCollection().modify(sentence => {
-            if (!sentence.category) sentence.category = '기본';
-        });
+        return tx.sentences.toCollection().modify(sentence => { if (!sentence.category) sentence.category = '기본'; });
     });
 
+    // 💡 전역 변수
     let rawSentences = [], studySentences = [], currentIndex = 0, isPlaying = false, playTimer = null, waitSeconds = 3;
     let mediaRecorder = null, audioChunks = [], audioUrl = null, audioStream = null; 
     let currentModalTab = 'single';
     let toastTimer = null; let studyOffset = 0; let isActionPaused = false; let remainingTime = 0; 
+    let activeCategoryFilter = null; // 특정 카테고리 학습 모드용
 
-    let currentAudio = null;
-    let isWaveformActive = false;
-    let audioCtx = null;
-    let analyser = null;
-    let visualizerAnimationId = null;
-    let recordedBlob = null; 
-    let currentUtterance = null; 
-    let engVoice = null;
-
-    let nativeAudioBuffer = null;
-    let myAudioBuffer = null;
-    let currentWaveMaxDuration = 2.0;
+    let currentAudio = null; let isWaveformActive = false; let audioCtx = null; let analyser = null;
+    let visualizerAnimationId = null; let recordedBlob = null; let currentUtterance = null; let engVoice = null;
+    let nativeAudioBuffer = null; let myAudioBuffer = null; let currentWaveMaxDuration = 2.0;
 
     function stopAllAudio() {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-            currentAudio = null;
-        }
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
-        }
-        const btnListening = document.getElementById('btnListening');
-        const btnNative = document.getElementById('btnNative');
-        if(btnListening) btnListening.classList.remove('listening');
-        if(btnNative) btnNative.classList.remove('native');
-        
+        if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        const btnListening = document.getElementById('btnListening'); const btnNative = document.getElementById('btnNative');
+        if(btnListening) btnListening.classList.remove('listening'); if(btnNative) btnNative.classList.remove('native');
         isActionPaused = false;
     }
 
@@ -510,8 +462,7 @@
     if (window.speechSynthesis && window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = loadVoices;
 
     function showToast(msg) {
-        const overlay = document.getElementById('toastOverlay');
-        document.getElementById('toastMessage').innerText = msg;
+        const overlay = document.getElementById('toastOverlay'); document.getElementById('toastMessage').innerText = msg;
         overlay.classList.add('active');
         if (toastTimer) clearTimeout(toastTimer);
         toastTimer = setTimeout(() => { overlay.classList.remove('active'); }, 1500);
@@ -552,44 +503,27 @@
             }
         }
         loadVoices(); applySettings(!resumeOffset); renderList();
-        
         checkInitialPermissionFlow();
     }
 
     function checkInitialPermissionFlow() {
         const isFlowDone = localStorage.getItem('initialPermissionFlowDone');
-        if (!isFlowDone) {
-            if (window.isNativeApp) {
-                localStorage.setItem('initialPermissionFlowDone', 'true');
-            } else {
-                openOverlay('micGuideModal');
-            }
-        }
+        if (!isFlowDone) { if (window.isNativeApp) localStorage.setItem('initialPermissionFlowDone', 'true'); else openOverlay('micGuideModal'); }
     }
 
     function acceptMicGuide() {
-        closeOverlay('micGuideModal');
-        localStorage.setItem('initialPermissionFlowDone', 'true');
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => stream.getTracks().forEach(t => t.stop()))
-            .catch(e => console.log("마이크 권한 거부됨"));
+        closeOverlay('micGuideModal'); localStorage.setItem('initialPermissionFlowDone', 'true');
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => stream.getTracks().forEach(t => t.stop())).catch(e => console.log("마이크 권한 거부됨"));
     }
 
     async function saveSettingsToDB() {
         waitSeconds = parseInt(document.getElementById('setWaitTime').value);
-        const existingSettings = await db.settings.get(1);
-        const lastStudyId = existingSettings ? existingSettings.lastStudyId : null;
+        const existingSettings = await db.settings.get(1); const lastStudyId = existingSettings ? existingSettings.lastStudyId : null;
         await db.settings.put({ 
-            id: 1, 
-            random: document.getElementById('setRandom').checked, 
-            priorityMode: document.getElementById('setPriority').checked,
-            useSavedVoice: document.getElementById('setUseSavedVoice').checked, 
-            nativeFirst: document.getElementById('setNativeFirst').checked, 
-            autoNext: document.getElementById('setAutoNext').checked, 
-            autoPlayRec: document.getElementById('setAutoPlayRec').checked, 
-            limit: parseInt(document.getElementById('setLimit').value), 
-            waitTime: waitSeconds, 
-            lastStudyId: lastStudyId
+            id: 1, random: document.getElementById('setRandom').checked, priorityMode: document.getElementById('setPriority').checked,
+            useSavedVoice: document.getElementById('setUseSavedVoice').checked, nativeFirst: document.getElementById('setNativeFirst').checked, 
+            autoNext: document.getElementById('setAutoNext').checked, autoPlayRec: document.getElementById('setAutoPlayRec').checked, 
+            limit: parseInt(document.getElementById('setLimit').value), waitTime: waitSeconds, lastStudyId: lastStudyId
         });
         applySettings(true);
     }
@@ -600,10 +534,60 @@
         showToast(!currentVal ? "암기 문장에서 제외되었습니다." : "다시 학습 문장에 포함됩니다.");
     }
 
+    // 💡 서브 탭 전환 로직
+    function switchListSubTab(tab) {
+        document.getElementById('subTabBtnSentences').classList.toggle('active', tab === 'sentences');
+        document.getElementById('subTabBtnCategories').classList.toggle('active', tab === 'categories');
+        document.getElementById('subTabSentences').classList.toggle('active', tab === 'sentences');
+        document.getElementById('subTabCategories').classList.toggle('active', tab === 'categories');
+        if (tab === 'categories') renderCategoryList();
+    }
+
+    // 💡 카테고리 목록 렌더링
+    function renderCategoryList() {
+        const container = document.getElementById('categoryList'); container.innerHTML = '';
+        const catMap = {};
+        rawSentences.forEach(s => {
+            const c = s.category || '기본';
+            if(!catMap[c]) catMap[c] = { total: 0, memorized: 0 };
+            catMap[c].total++; if(s.isMemorized) catMap[c].memorized++;
+        });
+
+        Object.keys(catMap).forEach(cat => {
+            const info = catMap[cat];
+            const div = document.createElement('div'); div.className = 'sentence-card';
+            div.innerHTML = `
+                <div style="flex: 1; pointer-events: none;">
+                    <strong style="font-size: 17px; margin-bottom:4px;">📚 ${cat}</strong>
+                    <span style="font-size: 13px; color: #888;">총 ${info.total}문장 (암기완료 ${info.memorized})</span>
+                </div>
+            `;
+            container.appendChild(div);
+
+            let startX = 0, startY = 0; let isSwiping = false; let swipeThreshold = 20;
+            div.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; isSwiping = false; div.style.transition = 'none'; }, { passive: true });
+            div.addEventListener('touchmove', e => {
+                let dx = e.touches[0].clientX - startX; let dy = e.touches[0].clientY - startY;
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) e.preventDefault(); 
+                if (Math.abs(dx) > Math.abs(dy) && dx < 0) {
+                    if (dx < -swipeThreshold) { isSwiping = true; div.style.transform = `translateX(${dx}px)`; div.classList.add('swiping'); } 
+                    else { div.style.transform = `translateX(0px)`; div.classList.remove('swiping'); isSwiping = false; }
+                }
+            }, { passive: false });
+            div.addEventListener('touchend', e => {
+                div.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s';
+                let dx = e.changedTouches[0].clientX - startX;
+                if (isSwiping && dx < -50) { div.style.transform = `translateX(0px)`; div.classList.remove('swiping'); openCategorySwipeModal(cat); } 
+                else { div.style.transform = `translateX(0px)`; div.classList.remove('swiping'); }
+                setTimeout(() => { isSwiping = false; }, 50);
+            });
+        });
+    }
+
+    // 💡 문장 리스트 렌더링
     function renderList() {
         const container = document.getElementById('sentenceList'); container.innerHTML = '';
-        const isEngVisible = document.getElementById('listEngSwitch').checked;
-        const isKorVisible = document.getElementById('listKorSwitch').checked;
+        const isEngVisible = document.getElementById('listEngSwitch').checked; const isKorVisible = document.getElementById('listKorSwitch').checked;
         const enlargeKor = !isEngVisible && isKorVisible;
         
         [...rawSentences].reverse().forEach((s) => {
@@ -639,113 +623,82 @@
             });
             div.addEventListener('click', e => { if (isSwiping) { e.preventDefault(); return; } if (!e.target.closest('.toggle-area')) openEditModal(s.id); });
         });
+        
+        if(document.getElementById('subTabCategories')?.classList.contains('active')) renderCategoryList();
     }
 
-    function openSwipeModal(id, eng) { document.getElementById('swipeTargetEng').innerText = eng; document.getElementById('swipeTargetId').value = id; openOverlay('swipeStartModal'); }
-    
+    // 💡 스와이프 기능
+    function openSwipeModal(id, eng) { 
+        document.getElementById('swipeTargetEng').innerText = eng; 
+        document.getElementById('swipeTargetId').value = id; 
+        document.getElementById('swipeTargetType').value = 'sentence';
+        openOverlay('swipeStartModal'); 
+    }
+
+    function openCategorySwipeModal(cat) {
+        document.getElementById('swipeTargetEng').innerText = `[${cat}] 카테고리 한정 학습`;
+        document.getElementById('swipeTargetId').value = cat; 
+        document.getElementById('swipeTargetType').value = 'category';
+        openOverlay('swipeStartModal');
+    }
+
     async function startFromSwipe() {
-        const targetId = parseInt(document.getElementById('swipeTargetId').value); closeOverlay('swipeStartModal');
-        const sentence = rawSentences.find(s => s.id === targetId);
-        if (sentence && sentence.isMemorized) { 
-            await db.sentences.update(targetId, { isMemorized: false }); 
-            rawSentences = await db.sentences.toArray(); 
-        }
+        const targetType = document.getElementById('swipeTargetType').value;
+        closeOverlay('swipeStartModal');
         
         if (document.getElementById('setRandom').checked) { 
             document.getElementById('setRandom').checked = false; 
-            showToast("지정 문장 학습을 위해 Random 모드가 해제되었습니다."); 
-            const s = await db.settings.get(1);
-            if (s) { s.random = false; await db.settings.put(s); }
+            showToast("지정 학습을 위해 Random 모드가 해제되었습니다."); 
+            const s = await db.settings.get(1); if (s) { s.random = false; await db.settings.put(s); }
         }
-        
-        let temp = [...rawSentences].reverse().filter(r => !r.isMemorized); 
-        if (document.getElementById('setPriority').checked) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
-        
-        let idx = temp.findIndex(r => r.id === targetId);
-        
-        if (idx !== -1) { 
-            studyOffset = idx; 
-            await applySettings(false); 
-            switchTab('study', document.getElementById('tabStudy')); 
+
+        if (targetType === 'category') {
+            const cat = document.getElementById('swipeTargetId').value;
+            activeCategoryFilter = cat; studyOffset = 0;
+            await applySettings(false); switchTab('study', document.getElementById('tabStudy')); 
+        } else {
+            const targetId = parseInt(document.getElementById('swipeTargetId').value); 
+            activeCategoryFilter = null; 
+            const sentence = rawSentences.find(s => s.id === targetId);
+            if (sentence && sentence.isMemorized) { await db.sentences.update(targetId, { isMemorized: false }); rawSentences = await db.sentences.toArray(); }
+            let temp = [...rawSentences].reverse().filter(r => !r.isMemorized); 
+            if (document.getElementById('setPriority').checked) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
+            let idx = temp.findIndex(r => r.id === targetId);
+            if (idx !== -1) { studyOffset = idx; await applySettings(false); switchTab('study', document.getElementById('tabStudy')); }
         }
     }
-    
-    // 탭 전환 및 클라우드 데이터 호출 처리 (새로운 로직 반영)
+
+    // 💡 탭 전환 및 클라우드 호출
     function switchModalTab(tab) {
         currentModalTab = tab; 
-        document.getElementById('tabBtnSingle').classList.toggle('active', tab === 'single');
-        document.getElementById('tabBtnBulk').classList.toggle('active', tab === 'bulk');
-        document.getElementById('tabBtnCloud').classList.toggle('active', tab === 'cloud');
-
-        document.getElementById('tabSingle').classList.toggle('active', tab === 'single');
-        document.getElementById('tabBulk').classList.toggle('active', tab === 'bulk');
-        document.getElementById('tabCloud').classList.toggle('active', tab === 'cloud');
-
-        if (tab === 'cloud') {
-            loadCloudCategories();
-        }
+        document.getElementById('tabBtnSingle').classList.toggle('active', tab === 'single'); document.getElementById('tabBtnBulk').classList.toggle('active', tab === 'bulk'); document.getElementById('tabBtnCloud').classList.toggle('active', tab === 'cloud');
+        document.getElementById('tabSingle').classList.toggle('active', tab === 'single'); document.getElementById('tabBulk').classList.toggle('active', tab === 'bulk'); document.getElementById('tabCloud').classList.toggle('active', tab === 'cloud');
+        if (tab === 'cloud') loadCloudCategories();
     }
 
-    // Firebase 카테고리 목록 불러오기 (연결 중 멘트 및 애니메이션 포함)
     async function loadCloudCategories() {
         const container = document.getElementById('cloudCategoryContainer');
-        container.innerHTML = `
-            <div style="text-align:center; padding:40px 20px; color:var(--primary); font-weight:bold;">
-                <div style="font-size: 30px; margin-bottom: 15px; animation: spin 1s linear infinite;">☁️</div>
-                <span class="loading-text">클라우드 연결 중...</span><br>
-                <span style="font-size: 13px; color: #888; font-weight: normal; margin-top: 8px; display: block;">서버에서 카테고리를 불러오고 있습니다.</span>
-            </div>
-        `;
-        
+        container.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--primary); font-weight:bold;"><div style="font-size: 30px; margin-bottom: 15px; animation: spin 1s linear infinite;">☁️</div><span class="loading-text">클라우드 연결 중...</span><br><span style="font-size: 13px; color: #888; font-weight: normal; margin-top: 8px; display: block;">서버에서 카테고리를 불러오고 있습니다.</span></div>`;
         try {
-            const response = await fetch(`${FIREBASE_BASE_URL}.json?shallow=true`);
-            const data = await response.json();
-            
-            if (!data) {
-                container.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">서버에 등록된 데이터가 없습니다.</div>';
-                return;
-            }
-            
+            const response = await fetch(`${FIREBASE_BASE_URL}.json?shallow=true`); const data = await response.json();
+            if (!data) { container.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">서버에 등록된 데이터가 없습니다.</div>'; return; }
             const categories = Object.keys(data);
-            container.innerHTML = categories.map(cat => `
-                <button class="cloud-cat-btn" onclick="selectCloudCategory(this, '${cat}')">
-                    📚 ${cat}
-                </button>
-            `).join('');
+            container.innerHTML = categories.map(cat => `<button class="cloud-cat-btn" onclick="selectCloudCategory(this, '${cat}')">📚 ${cat}</button>`).join('');
             document.getElementById('selectedCloudCategory').value = "";
-            
         } catch (error) {
-            console.error(error);
-            container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--danger);">네트워크 오류가 발생했습니다.<br>인터넷 연결을 확인해주세요.</div>';
+            console.error(error); container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--danger);">네트워크 오류가 발생했습니다.<br>인터넷 연결을 확인해주세요.</div>';
         }
     }
 
-    // 카테고리 선택 및 해제(토글) 처리 - 모바일 최적화 버전
-function selectCloudCategory(btnElement, categoryName) {
-    const hiddenInput = document.getElementById('selectedCloudCategory');
-    
-    // 1. 현재 클릭한 버튼이 이미 'selected' 클래스를 가지고 있는지 미리 확인
-    const isAlreadySelected = btnElement.classList.contains('selected');
-
-    // 2. 모든 버튼에서 'selected' 클래스를 일단 제거 (초기화)
-    const allButtons = document.querySelectorAll('.cloud-cat-btn');
-    allButtons.forEach(btn => {
-        btn.classList.remove('selected');
-        // 모바일 렌더링을 위해 인라인 스타일도 살짝 보정 (선택 사항)
-        btn.style.backgroundColor = ""; 
-    });
-
-    if (isAlreadySelected) {
-        // [해제 로직] 이미 선택된 상태였다면 값만 비우고 끝냅니다.
-        hiddenInput.value = "";
-        // 사용자에게 시각적 피드백 제공 (선택 사항)
-        showToast("선택이 해제되었습니다.");
-    } else {
-        // [선택 로직] 선택되지 않은 상태였다면 클래스를 추가하고 값을 채웁니다.
-        btnElement.classList.add('selected');
-        hiddenInput.value = categoryName;
+    // 💡 모바일 토글 최적화
+    function selectCloudCategory(btnElement, categoryName) {
+        const hiddenInput = document.getElementById('selectedCloudCategory');
+        const isAlreadySelected = btnElement.classList.contains('selected');
+        const allButtons = document.querySelectorAll('.cloud-cat-btn');
+        allButtons.forEach(btn => { btn.classList.remove('selected'); btn.style.backgroundColor = ""; });
+        if (isAlreadySelected) { hiddenInput.value = ""; showToast("선택이 해제되었습니다."); } 
+        else { btnElement.classList.add('selected'); hiddenInput.value = categoryName; }
     }
-}
 
     function setStars(level) { document.getElementById('inputLevel').value = level; const stars = document.getElementById('starContainer').children; for(let i=0; i<3; i++) stars[i].innerText = i < level ? '★' : '☆'; }
     
@@ -765,133 +718,103 @@ function selectCloudCategory(btnElement, categoryName) {
         openOverlay('editModal');
     }
 
-    // 데이터 저장/수정/삭제/다운로드 통합 처리
     async function handleData(action) {
         const editId = document.getElementById('editRowId').value;
-        
         if (action === 'save') {
             if (currentModalTab === 'single') {
-                const eng = document.getElementById('inputEng').value.trim(); 
-                const kor = document.getElementById('inputKor').value.trim();
+                const eng = document.getElementById('inputEng').value.trim(); const kor = document.getElementById('inputKor').value.trim();
                 if(!eng) { showToast("영어 문장을 입력해주세요."); return; }
-                
                 const newData = { eng, kor, importance: parseInt(document.getElementById('inputLevel').value), isMemorized: document.getElementById('inputDone').checked, category: '직접입력' };
-                if (editId === "") await db.sentences.add(newData);
-                else await db.sentences.update(parseInt(editId), newData);
-                
+                if (editId === "") await db.sentences.add(newData); else await db.sentences.update(parseInt(editId), newData);
                 showToast(editId === "" ? "문장이 추가되었습니다." : "문장이 수정되었습니다.");
-
             } else if (currentModalTab === 'bulk') {
                 const bulkText = document.getElementById('inputBulk').value;
                 if(!bulkText.trim()) { showToast("추가할 내용을 붙여넣어 주세요."); return; }
-                
                 const lines = bulkText.split('\n'); const list = [];
-                for (let l of lines) { 
-                    const p = l.split('/'); 
-                    if(p.length >= 2) list.push({ eng: p[0].trim(), kor: p.slice(1).join('/').trim(), importance: 1, isMemorized: false, category: '직접입력' }); 
-                }
-                
-                if (list.length > 0) { await db.sentences.bulkAdd(list); showToast(`${list.length}개의 문장이 추가되었습니다.`); } 
-                else { showToast("추가할 문장을 찾지 못했습니다.\n'영어/한글' 형식을 확인해주세요."); return; }
-
+                for (let l of lines) { const p = l.split('/'); if(p.length >= 2) list.push({ eng: p[0].trim(), kor: p.slice(1).join('/').trim(), importance: 1, isMemorized: false, category: '직접입력' }); }
+                if (list.length > 0) { await db.sentences.bulkAdd(list); showToast(`${list.length}개의 문장이 추가되었습니다.`); } else { showToast("추가할 문장을 찾지 못했습니다.\n'영어/한글' 형식을 확인해주세요."); return; }
             } else if (currentModalTab === 'cloud') {
                 const categoryName = document.getElementById('selectedCloudCategory').value;
                 if (!categoryName) { showToast("다운로드할 카테고리를 선택해주세요."); return; }
-
                 showToast(`'${categoryName}' 문장을 다운로드 중...`);
                 try {
                     const response = await fetch(`${FIREBASE_BASE_URL}/${encodeURIComponent(categoryName)}.json`);
                     const sentencesObj = await response.json();
-                    
-                    let newSentences = [];
-                    const items = Array.isArray(sentencesObj) ? sentencesObj : Object.values(sentencesObj);
-                    
+                    let newSentences = []; const items = Array.isArray(sentencesObj) ? sentencesObj : Object.values(sentencesObj);
                     items.forEach(item => {
                         if (item) {
-                            const engText = item.sentence || item.eng || item.english || "";
-                            const korText = item.translation || item.kor || item.korean || "";
-                            const importanceLvl = item.level || item.importance || 1;
-                            
-                            if (engText.trim() !== "") {
-                                newSentences.push({ eng: engText, kor: korText, importance: parseInt(importanceLvl), isMemorized: false, category: categoryName });
-                            }
+                            const engText = item.sentence || item.eng || item.english || ""; const korText = item.translation || item.kor || item.korean || ""; const importanceLvl = item.level || item.importance || 1;
+                            if (engText.trim() !== "") newSentences.push({ eng: engText, kor: korText, importance: parseInt(importanceLvl), isMemorized: false, category: categoryName });
                         }
                     });
-
-                    if (newSentences.length > 0) {
-                        await db.sentences.bulkAdd(newSentences);
-                        showToast(`${newSentences.length}개의 문장이 [${categoryName}]에 추가되었습니다!`);
-                    } else {
-                        showToast("해당 카테고리에 문장이 없습니다.");
-                    }
-                } catch (error) {
-                    console.error(error);
-                    showToast("다운로드에 실패했습니다.");
-                    return; 
-                }
+                    if (newSentences.length > 0) { await db.sentences.bulkAdd(newSentences); showToast(`${newSentences.length}개의 문장이 [${categoryName}]에 추가되었습니다!`); } else { showToast("해당 카테고리에 문장이 없습니다."); }
+                } catch (error) { console.error(error); showToast("다운로드에 실패했습니다."); return; }
             }
-            
-            rawSentences = await db.sentences.toArray(); 
-            renderList(); 
-            applySettings(false); 
-            closeOverlay('editModal');
-            
-        } else if (action === 'delete') { 
-            openOverlay('deleteConfirmModal'); 
-        }
+            rawSentences = await db.sentences.toArray(); renderList(); applySettings(false); closeOverlay('editModal');
+        } else if (action === 'delete') { openOverlay('deleteConfirmModal'); }
     }
 
     async function executeDelete() { const editId = document.getElementById('editRowId').value; await db.sentences.delete(parseInt(editId)); rawSentences = await db.sentences.toArray(); renderList(); applySettings(false); closeOverlay('deleteConfirmModal'); closeOverlay('editModal'); showToast("문장이 삭제되었습니다."); }
 
+    // 💡 환경설정 세팅 로직 (카테고리 필터링)
     async function applySettings(resetOffset = true) {
         if (resetOffset) studyOffset = 0; 
-        
         let temp = [...rawSentences].reverse().filter(s => !s.isMemorized); 
-        const limit = parseInt(document.getElementById('setLimit').value) || 20;
+        
+        if (activeCategoryFilter) temp = temp.filter(s => (s.category || '기본') === activeCategoryFilter);
 
-        const isRandom = document.getElementById('setRandom').checked;
-        const isPriority = document.getElementById('setPriority').checked;
+        const limit = parseInt(document.getElementById('setLimit').value) || 20;
+        const isRandom = document.getElementById('setRandom').checked; const isPriority = document.getElementById('setPriority').checked;
 
         if (isRandom) temp.sort(() => Math.random() - 0.5); 
         if (isPriority) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
         
-        if (isRandom) {
-            studySentences = temp.slice(0, limit); 
-        } else {
-            if (studyOffset >= temp.length && temp.length > 0) studyOffset = studyOffset % temp.length; 
-            studySentences = temp.slice(studyOffset, studyOffset + limit);
-            
-            if (studySentences.length < limit && temp.length > studySentences.length) {
-                const remain = limit - studySentences.length;
-                studySentences = studySentences.concat(temp.slice(0, remain));
+        if (isRandom) { studySentences = temp.slice(0, limit); } 
+        else {
+            if (activeCategoryFilter) { studySentences = temp.slice(studyOffset, studyOffset + limit); } 
+            else {
+                if (studyOffset >= temp.length && temp.length > 0) studyOffset = studyOffset % temp.length; 
+                studySentences = temp.slice(studyOffset, studyOffset + limit);
+                if (studySentences.length < limit && temp.length > studySentences.length) {
+                    const remain = limit - studySentences.length; studySentences = studySentences.concat(temp.slice(0, remain));
+                }
             }
         }
         
         currentIndex = 0; 
-        if (studySentences.length > 0 && !isRandom) { 
-            try { await db.settings.update(1, { lastStudyId: studySentences[0].id }); } 
-            catch(e) { await saveSettingsToDB(); } 
+        if (studySentences.length > 0 && !isRandom && !activeCategoryFilter) { 
+            try { await db.settings.update(1, { lastStudyId: studySentences[0].id }); } catch(e) { await saveSettingsToDB(); } 
         }
         updateView();
     }
 
+    // 💡 다음 학습 진행 로직 (카테고리 소진 시 자동 종료)
     function nextBatch() { 
         closeOverlay('completionModal'); 
-        if (!document.getElementById('setRandom').checked) {
-            const limit = parseInt(document.getElementById('setLimit').value) || 20;
-            let tempLength = rawSentences.filter(s => !s.isMemorized).length;
-            if(tempLength > 0) studyOffset = (studyOffset + limit) % tempLength;
+        const limit = parseInt(document.getElementById('setLimit').value) || 20;
+
+        if (activeCategoryFilter) {
+            studyOffset += limit;
+            let tempLength = rawSentences.filter(s => !s.isMemorized && (s.category || '기본') === activeCategoryFilter).length;
+            if (studyOffset >= tempLength) {
+                showToast("🎉 해당 카테고리의 모든 문장 학습을 완료했습니다!");
+                activeCategoryFilter = null; studyOffset = 0; switchTab('list', document.getElementById('tabList')); return; 
+            }
+            applySettings(false);
+        } else {
+            if (!document.getElementById('setRandom').checked) {
+                let tempLength = rawSentences.filter(s => !s.isMemorized).length;
+                if(tempLength > 0) studyOffset = (studyOffset + limit) % tempLength;
+            }
+            applySettings(false); 
         }
-        applySettings(false); 
     }
     
     function repeatBatch() { closeOverlay('completionModal'); currentIndex = 0; updateView(); }
     function stopStudy() { closeOverlay('completionModal'); currentIndex = 0; updateView(); toggleTabsVisibility(true); }
 
     function updateView() {
-        stopAllAudio();
-        clearWaveforms();
-
+        stopAllAudio(); clearWaveforms();
         if(studySentences.length === 0) {
             document.getElementById('displayEng').innerText = "학습할 문장이 없습니다."; document.getElementById('displayKor').innerText = "모두 암기했거나 문장이 없습니다.";
             document.getElementById('statText').innerText = `0/0`; document.getElementById('progressFill').style.width = `0%`; return;
@@ -901,30 +824,20 @@ function selectCloudCategory(btnElement, categoryName) {
         document.getElementById('statText').innerText = `${currentIndex + 1}/${studySentences.length}`;
         document.getElementById('progressFill').style.width = `${((currentIndex+1)/studySentences.length)*100}%`;
         updateToggleButtonsUI();
-        
-        if (isPlaying) { 
-            if (document.getElementById('setNativeFirst').checked) speakCurrent();
-            runCycle(); 
-        }
+        if (isPlaying) { if (document.getElementById('setNativeFirst').checked) speakCurrent(); runCycle(); }
     }
 
-    function toggleTabsVisibility(show) {
-        document.querySelector('.tabs').style.display = show ? 'flex' : 'none';
-    }
+    function toggleTabsVisibility(show) { document.querySelector('.tabs').style.display = show ? 'flex' : 'none'; }
 
     async function togglePlay() {
         if(studySentences.length === 0) { showToast("학습할 문장이 없습니다."); return; } 
         const btn = document.getElementById('btnMainPlay'); isPlaying = !isPlaying;
         if (isPlaying) { 
-            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`; 
-            toggleTabsVisibility(false); 
-            if(document.getElementById('setNativeFirst').checked) await speakCurrent(); 
-            runCycle(); 
+            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`; toggleTabsVisibility(false); 
+            if(document.getElementById('setNativeFirst').checked) await speakCurrent(); runCycle(); 
         } else { 
-            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>`; 
-            clearInterval(playTimer); document.getElementById('countdownText').innerText = ""; 
-            stopAllAudio();
-            toggleTabsVisibility(true); 
+            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>`; clearInterval(playTimer); document.getElementById('countdownText').innerText = ""; 
+            stopAllAudio(); toggleTabsVisibility(true); 
         }
     }
 
@@ -944,13 +857,7 @@ function selectCloudCategory(btnElement, categoryName) {
     function move(step) { 
         if(studySentences.length === 0) return;
         if (step === 1 && currentIndex === studySentences.length - 1) {
-            if (isPlaying) { 
-                isPlaying = false; 
-                document.getElementById('btnMainPlay').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>`; 
-                clearInterval(playTimer); document.getElementById('countdownText').innerText = ""; 
-                stopAllAudio(); 
-                toggleTabsVisibility(true); 
-            }
+            if (isPlaying) { isPlaying = false; document.getElementById('btnMainPlay').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>`; clearInterval(playTimer); document.getElementById('countdownText').innerText = ""; stopAllAudio(); toggleTabsVisibility(true); }
             openOverlay('completionModal'); return;
         }
         currentIndex = (currentIndex + step + studySentences.length) % studySentences.length; updateView(); 
@@ -958,10 +865,8 @@ function selectCloudCategory(btnElement, categoryName) {
 
     function updateToggleButtonsUI() {
         const e = document.getElementById('displayEng'), k = document.getElementById('displayKor');
-        document.getElementById('btnEngToggle').innerText = e.classList.contains('hidden') ? "영문 On" : "영문 Off";
-        document.getElementById('btnKorToggle').innerText = k.classList.contains('hidden') ? "한글 On" : "한글 Off";
-        document.getElementById('btnKorToggle').disabled = e.classList.contains('hidden');
-        document.getElementById('btnKorToggle').style.opacity = e.classList.contains('hidden') ? "0.5" : "1";
+        document.getElementById('btnEngToggle').innerText = e.classList.contains('hidden') ? "영문 On" : "영문 Off"; document.getElementById('btnKorToggle').innerText = k.classList.contains('hidden') ? "한글 On" : "한글 Off";
+        document.getElementById('btnKorToggle').disabled = e.classList.contains('hidden'); document.getElementById('btnKorToggle').style.opacity = e.classList.contains('hidden') ? "0.5" : "1";
     }
 
     function toggleEng() { document.getElementById('displayEng').classList.toggle('hidden'); if(document.getElementById('displayEng').classList.contains('hidden')) document.getElementById('displayKor').classList.remove('hidden'); updateToggleButtonsUI(); }
@@ -972,512 +877,183 @@ function selectCloudCategory(btnElement, categoryName) {
                 const k = document.getElementById('displayKor'); k.classList.toggle('hidden');
                 const isKorHidden = k.classList.contains('hidden'); const waveBtn = document.getElementById('btnWaveform');
                 if (isKorHidden) { waveBtn.classList.remove('hidden'); } 
-                else { 
-                    waveBtn.classList.add('hidden'); waveBtn.classList.remove('active'); 
-                    isWaveformActive = false; 
-                    document.getElementById('waveformContainer').style.display = 'none'; 
-                    const saveBtn = document.getElementById('btnSaveVoice');
-                    if (saveBtn) saveBtn.style.display = 'none';
-                    cancelAnimationFrame(visualizerAnimationId); 
-                }
+                else { waveBtn.classList.add('hidden'); waveBtn.classList.remove('active'); isWaveformActive = false; document.getElementById('waveformContainer').style.display = 'none'; const saveBtn = document.getElementById('btnSaveVoice'); if (saveBtn) saveBtn.style.display = 'none'; cancelAnimationFrame(visualizerAnimationId); }
             }
         }
         updateToggleButtonsUI();
     }
 
     function toggleListLang(changedLang) {
-        const engSwitch = document.getElementById('listEngSwitch');
-        const korSwitch = document.getElementById('listKorSwitch');
-
-        if (!engSwitch.checked && !korSwitch.checked) {
-            if (changedLang === 'eng') korSwitch.checked = true;
-            else engSwitch.checked = true;
-            showToast("영어와 한글을 동시에 가릴 수 없습니다.");
-        }
-
-        const isEngVisible = engSwitch.checked;
-        const isKorVisible = korSwitch.checked;
-        const enlargeKor = !isEngVisible && isKorVisible; 
-
+        const engSwitch = document.getElementById('listEngSwitch'); const korSwitch = document.getElementById('listKorSwitch');
+        if (!engSwitch.checked && !korSwitch.checked) { if (changedLang === 'eng') korSwitch.checked = true; else engSwitch.checked = true; showToast("영어와 한글을 동시에 가릴 수 없습니다."); }
+        const isEngVisible = engSwitch.checked; const isKorVisible = korSwitch.checked; const enlargeKor = !isEngVisible && isKorVisible; 
         document.querySelectorAll('.list-eng').forEach(el => el.classList.toggle('hidden', !isEngVisible));
-        document.querySelectorAll('.list-kor').forEach(el => {
-            el.classList.toggle('hidden', !isKorVisible);
-            el.classList.toggle('enlarged', enlargeKor); 
-        });
+        document.querySelectorAll('.list-kor').forEach(el => { el.classList.toggle('hidden', !isKorVisible); el.classList.toggle('enlarged', enlargeKor); });
     }
 
     function toggleWaveform() {
-        isWaveformActive = !isWaveformActive;
-        const waveBtn = document.getElementById('btnWaveform');
-        const container = document.getElementById('waveformContainer');
-        const saveBtn = document.getElementById('btnSaveVoice');
-        
-        if (isWaveformActive) {
-            waveBtn.classList.add('active');
-            container.style.display = 'flex';
-            if (saveBtn) saveBtn.style.display = 'flex';
-            initAudioContext();
-            drawIdleWaveform('nativeCanvas');
-            drawIdleWaveform('myCanvas');
-        } else {
-            waveBtn.classList.remove('active');
-            container.style.display = 'none';
-            if (saveBtn) saveBtn.style.display = 'none';
-            cancelAnimationFrame(visualizerAnimationId);
-        }
+        isWaveformActive = !isWaveformActive; const waveBtn = document.getElementById('btnWaveform'); const container = document.getElementById('waveformContainer'); const saveBtn = document.getElementById('btnSaveVoice');
+        if (isWaveformActive) { waveBtn.classList.add('active'); container.style.display = 'flex'; if (saveBtn) saveBtn.style.display = 'flex'; initAudioContext(); drawIdleWaveform('nativeCanvas'); drawIdleWaveform('myCanvas'); } 
+        else { waveBtn.classList.remove('active'); container.style.display = 'none'; if (saveBtn) saveBtn.style.display = 'none'; cancelAnimationFrame(visualizerAnimationId); }
     }
 
     function initAudioContext() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
 
-    function base64ToArrayBuffer(base64) {
-        const binaryString = window.atob(base64);
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
-        return bytes.buffer;
-    }
+    function base64ToArrayBuffer(base64) { const binaryString = window.atob(base64); const len = binaryString.length; const bytes = new Uint8Array(len); for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i); return bytes.buffer; }
 
     function animatePlayhead(audioElement, playheadId) {
-        const playhead = document.getElementById(playheadId);
-        playhead.style.display = 'block';
-        
-        function update() {
-            if (audioElement.paused || audioElement.ended) return;
-            const percent = (audioElement.currentTime / currentWaveMaxDuration) * 100;
-            playhead.style.left = Math.min(percent, 100) + '%';
-            visualizerAnimationId = requestAnimationFrame(update);
-        }
+        const playhead = document.getElementById(playheadId); playhead.style.display = 'block';
+        function update() { if (audioElement.paused || audioElement.ended) return; const percent = (audioElement.currentTime / currentWaveMaxDuration) * 100; playhead.style.left = Math.min(percent, 100) + '%'; visualizerAnimationId = requestAnimationFrame(update); }
         audioElement.onplay = () => requestAnimationFrame(update);
-        
-        audioElement.addEventListener('ended', () => {
-            playhead.style.display = 'none';
-            cancelAnimationFrame(visualizerAnimationId);
-        }, { once: true });
+        audioElement.addEventListener('ended', () => { playhead.style.display = 'none'; cancelAnimationFrame(visualizerAnimationId); }, { once: true });
     }
 
     async function saveCurrentVoice() {
-        if (!recordedBlob) {
-            showToast("저장할 녹음 데이터가 없습니다.\n먼저 Speaking 버튼으로 녹음해주세요.");
-            return;
-        }
-        
-        const s = studySentences[currentIndex];
-        if (!s) return;
-
-        try {
-            await db.sentences.update(s.id, { savedVoice: recordedBlob });
-            s.savedVoice = recordedBlob; 
-            const target = rawSentences.find(r => r.id === s.id);
-            if (target) target.savedVoice = recordedBlob;
-            
-            showToast("이 문장에 내 목소리가 저장되었습니다!");
-        } catch (error) {
-            console.error("음성 저장 실패:", error);
-            showToast("저장 중 오류가 발생했습니다.");
-        }
+        if (!recordedBlob) { showToast("저장할 녹음 데이터가 없습니다.\n먼저 Speaking 버튼으로 녹음해주세요."); return; }
+        const s = studySentences[currentIndex]; if (!s) return;
+        try { await db.sentences.update(s.id, { savedVoice: recordedBlob }); s.savedVoice = recordedBlob; const target = rawSentences.find(r => r.id === s.id); if (target) target.savedVoice = recordedBlob; showToast("이 문장에 내 목소리가 저장되었습니다!"); } 
+        catch (error) { console.error("음성 저장 실패:", error); showToast("저장 중 오류가 발생했습니다."); }
     }
 
     async function speakCurrent() {
-        stopAllAudio();
-        const s = studySentences[currentIndex];
-        const textToSpeak = s?.eng;
-        if (!textToSpeak) return;
-    
-        remainingTime = waitSeconds; 
-        isActionPaused = true;
-        initAudioContext();
-        
-        const btnNative = document.getElementById('btnNative');
-        btnNative.classList.add('native');
-
+        stopAllAudio(); const s = studySentences[currentIndex]; const textToSpeak = s?.eng; if (!textToSpeak) return;
+        remainingTime = waitSeconds; isActionPaused = true; initAudioContext();
+        const btnNative = document.getElementById('btnNative'); btnNative.classList.add('native');
         const useSavedVoice = document.getElementById('setUseSavedVoice').checked;
 
         if (useSavedVoice && s.savedVoice) {
             try {
-                const savedUrl = URL.createObjectURL(s.savedVoice);
-                currentAudio = new Audio(savedUrl);
-                
-                if (isWaveformActive) {
-                    const arrayBuffer = await s.savedVoice.arrayBuffer();
-                    nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                    syncDrawWaveforms();
-                    animatePlayhead(currentAudio, 'nativePlayhead');
-                }
-
+                const savedUrl = URL.createObjectURL(s.savedVoice); currentAudio = new Audio(savedUrl);
+                if (isWaveformActive) { const arrayBuffer = await s.savedVoice.arrayBuffer(); nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer); syncDrawWaveforms(); animatePlayhead(currentAudio, 'nativePlayhead'); }
                 currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(savedUrl); btnNative.classList.remove('native'); currentAudio = null; };
                 currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(savedUrl); btnNative.classList.remove('native'); currentAudio = null; };
-                
-                await currentAudio.play();
-                return; 
-            } catch (e) {
-                console.error("저장된 음성 재생 실패", e);
-            }
+                await currentAudio.play(); return; 
+            } catch (e) { console.error("저장된 음성 재생 실패", e); }
         }
 
         if (s.nativeVoice) {
             try {
-                const cachedUrl = URL.createObjectURL(s.nativeVoice);
-                currentAudio = new Audio(cachedUrl);
-                
-                if (isWaveformActive) {
-                    const arrayBuffer = await s.nativeVoice.arrayBuffer();
-                    nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                    syncDrawWaveforms();
-                    animatePlayhead(currentAudio, 'nativePlayhead');
-                }
-
+                const cachedUrl = URL.createObjectURL(s.nativeVoice); currentAudio = new Audio(cachedUrl);
+                if (isWaveformActive) { const arrayBuffer = await s.nativeVoice.arrayBuffer(); nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer); syncDrawWaveforms(); animatePlayhead(currentAudio, 'nativePlayhead'); }
                 currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(cachedUrl); btnNative.classList.remove('native'); currentAudio = null; };
                 currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(cachedUrl); btnNative.classList.remove('native'); currentAudio = null; };
-                
-                await currentAudio.play();
-                return; 
-            } catch (e) {
-                console.error("캐시된 네이티브 음성 재생 실패", e);
-            }
+                await currentAudio.play(); return; 
+            } catch (e) { console.error("캐시된 네이티브 음성 재생 실패", e); }
         }
 
         try {
-            const response = await fetch(GAS_TTS_URL, {
-                method: 'POST', body: JSON.stringify({ text: textToSpeak })
-            });
-            const data = await response.json();
-            
+            const response = await fetch(GAS_TTS_URL, { method: 'POST', body: JSON.stringify({ text: textToSpeak }) }); const data = await response.json();
             if (data.audioContent) {
-                const arrayBuffer = base64ToArrayBuffer(data.audioContent);
-                const nativeBlob = new Blob([arrayBuffer], { type: 'audio/mp3' });
-                
-                try {
-                    await db.sentences.update(s.id, { nativeVoice: nativeBlob });
-                    s.nativeVoice = nativeBlob;
-                    const target = rawSentences.find(r => r.id === s.id);
-                    if (target) target.nativeVoice = nativeBlob;
-                } catch (dbErr) {
-                    console.error("네이티브 음성 캐싱 실패:", dbErr);
-                }
-
-                const audioUrlForTTS = URL.createObjectURL(nativeBlob);
-                currentAudio = new Audio(audioUrlForTTS);
-                
-                if (isWaveformActive) {
-                    try {
-                        nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer.slice(0)); 
-                        syncDrawWaveforms();
-                    } catch(e) { console.error("Native Waveform Error:", e); }
-                }
-
+                const arrayBuffer = base64ToArrayBuffer(data.audioContent); const nativeBlob = new Blob([arrayBuffer], { type: 'audio/mp3' });
+                try { await db.sentences.update(s.id, { nativeVoice: nativeBlob }); s.nativeVoice = nativeBlob; const target = rawSentences.find(r => r.id === s.id); if (target) target.nativeVoice = nativeBlob; } catch (dbErr) {}
+                const audioUrlForTTS = URL.createObjectURL(nativeBlob); currentAudio = new Audio(audioUrlForTTS);
+                if (isWaveformActive) { try { nativeAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer.slice(0)); syncDrawWaveforms(); } catch(e) {} }
                 currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(audioUrlForTTS); btnNative.classList.remove('native'); currentAudio = null; };
                 currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(audioUrlForTTS); btnNative.classList.remove('native'); currentAudio = null; };
-                
-                if (isWaveformActive) animatePlayhead(currentAudio, 'nativePlayhead');
-                await currentAudio.play();
-
+                if (isWaveformActive) animatePlayhead(currentAudio, 'nativePlayhead'); await currentAudio.play();
             } else { throw new Error("No audio content"); }
-        } catch (error) {
-            console.error("Cloud TTS 실패:", error);
-            triggerFallbackTTS(textToSpeak); 
-        }
+        } catch (error) { triggerFallbackTTS(textToSpeak); }
     }
 
     async function toggleRecord() {
-        const isStopping = mediaRecorder && mediaRecorder.state === "recording";
-        stopAllAudio();
-        
-        remainingTime = waitSeconds; 
-        isActionPaused = true;
-
+        const isStopping = mediaRecorder && mediaRecorder.state === "recording"; stopAllAudio(); remainingTime = waitSeconds; isActionPaused = true;
         const btn = document.getElementById('btnRecord');
-        if (isStopping) { 
-            mediaRecorder.stop(); 
-            btn.classList.remove('recording'); 
-            if (audioStream) audioStream.getTracks().forEach(track => track.stop());
-            cancelAnimationFrame(visualizerAnimationId);
-        } else {
+        if (isStopping) { mediaRecorder.stop(); btn.classList.remove('recording'); if (audioStream) audioStream.getTracks().forEach(track => track.stop()); cancelAnimationFrame(visualizerAnimationId); } 
+        else {
             try {
-                initAudioContext();
-                audioStream = await navigator.mediaDevices.getUserMedia({ audio: true }); 
-                
-                if (isWaveformActive) {
-                    const source = audioCtx.createMediaStreamSource(audioStream);
-                    analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048;
-                    source.connect(analyser);
-                    
-                    drawRealtimeWaveform('myCanvas', getCssColor('--wave-my-color')); 
-                }
-
-                const mimeType = getSupportedMimeType();
-                mediaRecorder = new MediaRecorder(audioStream, { mimeType }); 
-                audioChunks = [];
+                initAudioContext(); audioStream = await navigator.mediaDevices.getUserMedia({ audio: true }); 
+                if (isWaveformActive) { const source = audioCtx.createMediaStreamSource(audioStream); analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048; source.connect(analyser); drawRealtimeWaveform('myCanvas', getCssColor('--wave-my-color')); }
+                const mimeType = getSupportedMimeType(); mediaRecorder = new MediaRecorder(audioStream, { mimeType }); audioChunks = [];
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
-
                 mediaRecorder.onstop = async () => { 
                     recordedBlob = new Blob(audioChunks, { type: mimeType });
-                    
-                    let nativeSilenceSec = 0.05;
-                    if (nativeAudioBuffer) {
-                        nativeSilenceSec = getLeadingSilenceDuration(nativeAudioBuffer);
-                    }
-                    
+                    let nativeSilenceSec = 0.05; if (nativeAudioBuffer) { nativeSilenceSec = getLeadingSilenceDuration(nativeAudioBuffer); }
                     recordedBlob = await alignAndTrimSilence(recordedBlob, nativeSilenceSec);
-                    
-                    if (audioUrl) URL.revokeObjectURL(audioUrl); 
-                    audioUrl = URL.createObjectURL(recordedBlob); 
-                    
-                    if (isWaveformActive) {
-                        try {
-                            const arrayBuffer = await recordedBlob.arrayBuffer();
-                            myAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                            syncDrawWaveforms();
-                        } catch(e) { console.error("My Waveform Error:", e); }
-                    }
-
-                    remainingTime = waitSeconds;
-                    if(document.getElementById('setAutoPlayRec').checked) playMyVoice(); 
-                    else isActionPaused = false; 
+                    if (audioUrl) URL.revokeObjectURL(audioUrl); audioUrl = URL.createObjectURL(recordedBlob); 
+                    if (isWaveformActive) { try { const arrayBuffer = await recordedBlob.arrayBuffer(); myAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer); syncDrawWaveforms(); } catch(e) {} }
+                    remainingTime = waitSeconds; if(document.getElementById('setAutoPlayRec').checked) playMyVoice(); else isActionPaused = false; 
                 };
-                
                 mediaRecorder.start(); btn.classList.add('recording');
-            } catch(e) { 
-                showToast("마이크 권한이 필요합니다."); 
-                remainingTime = waitSeconds;
-                isActionPaused = false; 
-            } 
+            } catch(e) { showToast("마이크 권한이 필요합니다."); remainingTime = waitSeconds; isActionPaused = false; } 
         }
     }
 
     async function playMyVoice() { 
         if(audioUrl) {
-            stopAllAudio();
-            
-            remainingTime = waitSeconds;
-            isActionPaused = true; 
-            
-            const btnListening = document.getElementById('btnListening');
-            btnListening.classList.add('listening');
-
+            stopAllAudio(); remainingTime = waitSeconds; isActionPaused = true; const btnListening = document.getElementById('btnListening'); btnListening.classList.add('listening');
             currentAudio = new Audio(audioUrl);
             currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; }; 
             currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; }; 
-            
             if (isWaveformActive) animatePlayhead(currentAudio, 'myPlayhead');
-            
-            const playPromise = currentAudio.play();
-            if (playPromise !== undefined) playPromise.catch(error => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; });
+            const playPromise = currentAudio.play(); if (playPromise !== undefined) playPromise.catch(error => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; });
         } else { showToast("먼저 'Speaking' 버튼을 눌러 목소리를 녹음해주세요."); }
     }
 
     function triggerFallbackTTS(textToSpeak) {
-        if (!window.speechSynthesis) { 
-            remainingTime = waitSeconds;
-            isActionPaused = false; 
-            return; 
-        }
-        
-        const btnNative = document.getElementById('btnNative');
-        currentUtterance = new SpeechSynthesisUtterance(textToSpeak);
-        currentUtterance.lang = 'en-US';
-        if (engVoice) currentUtterance.voice = engVoice;
-        
-        currentUtterance.onend = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); };
-        currentUtterance.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); };
-        
+        if (!window.speechSynthesis) { remainingTime = waitSeconds; isActionPaused = false; return; }
+        const btnNative = document.getElementById('btnNative'); currentUtterance = new SpeechSynthesisUtterance(textToSpeak); currentUtterance.lang = 'en-US'; if (engVoice) currentUtterance.voice = engVoice;
+        currentUtterance.onend = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); }; currentUtterance.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); };
         window.speechSynthesis.speak(currentUtterance);
     }
 
-    function clearWaveforms() {
-        ['nativeCanvas', 'myCanvas'].forEach(id => {
-            if (document.getElementById(id)) drawIdleWaveform(id);
-        });
-        recordedBlob = null;
-        audioUrl = null;
-        nativeAudioBuffer = null;
-        myAudioBuffer = null;
-        currentWaveMaxDuration = 2.0;
-    }
+    function clearWaveforms() { ['nativeCanvas', 'myCanvas'].forEach(id => { if (document.getElementById(id)) drawIdleWaveform(id); }); recordedBlob = null; audioUrl = null; nativeAudioBuffer = null; myAudioBuffer = null; currentWaveMaxDuration = 2.0; }
 
     function drawIdleWaveform(canvasId) {
-        const canvas = document.getElementById(canvasId);
-        if(!canvas) return;
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height / 2);
-        ctx.lineTo(canvas.width, canvas.height / 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        const canvas = document.getElementById(canvasId); if(!canvas) return; const ctx = canvas.getContext('2d'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.beginPath(); ctx.moveTo(0, canvas.height / 2); ctx.lineTo(canvas.width, canvas.height / 2); ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.lineWidth = 2; ctx.stroke();
     }
 
     function drawRealtimeWaveform(canvasId, color) {
-        if (!analyser) return;
-        const canvas = document.getElementById(canvasId);
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
-        
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
+        if (!analyser) return; const canvas = document.getElementById(canvasId); const ctx = canvas.getContext('2d'); canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const bufferLength = analyser.frequencyBinCount; const dataArray = new Uint8Array(bufferLength);
         function draw() {
-            visualizerAnimationId = requestAnimationFrame(draw);
-            analyser.getByteTimeDomainData(dataArray);
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.beginPath();
-            
+            visualizerAnimationId = requestAnimationFrame(draw); analyser.getByteTimeDomainData(dataArray); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.beginPath();
             const sliceWidth = canvas.width * 1.0 / bufferLength; let x = 0;
-            for(let i = 0; i < bufferLength; i++) {
-                const v = dataArray[i] / 128.0; const y = v * canvas.height / 2;
-                if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                x += sliceWidth;
-            }
+            for(let i = 0; i < bufferLength; i++) { const v = dataArray[i] / 128.0; const y = v * canvas.height / 2; if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); x += sliceWidth; }
             ctx.lineTo(canvas.width, canvas.height / 2); ctx.stroke();
         }
         draw();
     }
 
     function syncDrawWaveforms() {
-        let maxDur = 2.0; 
-        if (nativeAudioBuffer) maxDur = Math.max(maxDur, nativeAudioBuffer.duration);
-        if (myAudioBuffer) maxDur = Math.max(maxDur, myAudioBuffer.duration);
-        currentWaveMaxDuration = maxDur;
-
+        let maxDur = 2.0; if (nativeAudioBuffer) maxDur = Math.max(maxDur, nativeAudioBuffer.duration); if (myAudioBuffer) maxDur = Math.max(maxDur, myAudioBuffer.duration); currentWaveMaxDuration = maxDur;
         if (nativeAudioBuffer) renderWaveToCanvas(nativeAudioBuffer, 'nativeCanvas', getCssColor('--wave-native-color'), currentWaveMaxDuration);
         if (myAudioBuffer) renderWaveToCanvas(myAudioBuffer, 'myCanvas', getCssColor('--wave-my-color'), currentWaveMaxDuration);
     }
 
     function renderWaveToCanvas(audioBuffer, canvasId, color, maxDuration) {
-        const canvas = document.getElementById(canvasId);
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = canvas.offsetHeight;
-        
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = color; 
-        
-        const channelData = audioBuffer.getChannelData(0);
-        const totalSamplesToDraw = Math.floor(maxDuration * audioBuffer.sampleRate);
-        const step = Math.max(1, Math.ceil(totalSamplesToDraw / width));
-        const amp = height / 2;
-        
-        for (let i = 0; i < width; i++) {
-            let min = 1.0, max = -1.0;
-            let startIdx = i * step;
-            let endIdx = Math.min(startIdx + step, channelData.length);
-            
-            if (startIdx >= channelData.length) break; 
-
-            for (let j = startIdx; j < endIdx; j++) {
-                const datum = channelData[j];
-                if (datum < min) min = datum;
-                if (datum > max) max = datum;
-            }
-            ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
-        }
+        const canvas = document.getElementById(canvasId); const ctx = canvas.getContext('2d'); const width = canvas.width = canvas.offsetWidth; const height = canvas.height = canvas.offsetHeight;
+        ctx.clearRect(0, 0, width, height); ctx.fillStyle = color; const channelData = audioBuffer.getChannelData(0); const totalSamplesToDraw = Math.floor(maxDuration * audioBuffer.sampleRate); const step = Math.max(1, Math.ceil(totalSamplesToDraw / width)); const amp = height / 2;
+        for (let i = 0; i < width; i++) { let min = 1.0, max = -1.0; let startIdx = i * step; let endIdx = Math.min(startIdx + step, channelData.length); if (startIdx >= channelData.length) break; 
+            for (let j = startIdx; j < endIdx; j++) { const datum = channelData[j]; if (datum < min) min = datum; if (datum > max) max = datum; } ctx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp)); }
     }
 
     function getLeadingSilenceDuration(audioBuffer) {
-        const channelData = audioBuffer.getChannelData(0);
-        const sampleRate = audioBuffer.sampleRate;
-        let noiseSum = 0;
-        const noiseSampleCount = Math.min(sampleRate * 0.1, channelData.length);
-        if (noiseSampleCount === 0) return 0;
-        
-        for (let i = 0; i < noiseSampleCount; i++) {
-            noiseSum += Math.abs(channelData[i]);
-        }
-        const noiseFloor = noiseSum / noiseSampleCount;
-        const threshold = Math.max(0.02, noiseFloor * 3);
-
-        for (let i = 0; i < channelData.length; i++) {
-            if (Math.abs(channelData[i]) > threshold) {
-                return i / sampleRate;
-            }
-        }
-        return 0;
+        const channelData = audioBuffer.getChannelData(0); const sampleRate = audioBuffer.sampleRate; let noiseSum = 0; const noiseSampleCount = Math.min(sampleRate * 0.1, channelData.length); if (noiseSampleCount === 0) return 0;
+        for (let i = 0; i < noiseSampleCount; i++) { noiseSum += Math.abs(channelData[i]); } const noiseFloor = noiseSum / noiseSampleCount; const threshold = Math.max(0.02, noiseFloor * 3);
+        for (let i = 0; i < channelData.length; i++) { if (Math.abs(channelData[i]) > threshold) { return i / sampleRate; } } return 0;
     }
 
     async function alignAndTrimSilence(blob, targetLeadingSec) {
-        if (!audioCtx) initAudioContext();
-        const arrayBuffer = await blob.arrayBuffer();
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-
-        const channelData = audioBuffer.getChannelData(0);
-        const sampleRate = audioBuffer.sampleRate;
-
-        let noiseSum = 0;
-        const noiseSampleCount = Math.min(sampleRate * 0.1, channelData.length);
-        for (let i = 0; i < noiseSampleCount; i++) {
-            noiseSum += Math.abs(channelData[i]);
-        }
-        const noiseFloor = noiseSum / noiseSampleCount;
-        const threshold = Math.max(0.02, noiseFloor * 3);
-
-        let startIndex = 0;
-        let endIndex = channelData.length;
-
-        for (let i = 0; i < channelData.length; i++) {
-            if (Math.abs(channelData[i]) > threshold) {
-                startIndex = i;
-                break;
-            }
-        }
-
-        for (let i = channelData.length - 1; i >= 0; i--) {
-            if (Math.abs(channelData[i]) > threshold) {
-                endIndex = i;
-                break;
-            }
-        }
-
-        const paddingTail = Math.floor(0.05 * sampleRate);
-        endIndex = Math.min(channelData.length, endIndex + paddingTail);
-
+        if (!audioCtx) initAudioContext(); const arrayBuffer = await blob.arrayBuffer(); const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer); const channelData = audioBuffer.getChannelData(0); const sampleRate = audioBuffer.sampleRate; let noiseSum = 0; const noiseSampleCount = Math.min(sampleRate * 0.1, channelData.length);
+        for (let i = 0; i < noiseSampleCount; i++) { noiseSum += Math.abs(channelData[i]); } const noiseFloor = noiseSum / noiseSampleCount; const threshold = Math.max(0.02, noiseFloor * 3);
+        let startIndex = 0; let endIndex = channelData.length;
+        for (let i = 0; i < channelData.length; i++) { if (Math.abs(channelData[i]) > threshold) { startIndex = i; break; } }
+        for (let i = channelData.length - 1; i >= 0; i--) { if (Math.abs(channelData[i]) > threshold) { endIndex = i; break; } }
+        const paddingTail = Math.floor(0.05 * sampleRate); endIndex = Math.min(channelData.length, endIndex + paddingTail);
         if (startIndex >= endIndex) return blob;
-
-        const targetLeadingSamples = Math.floor(targetLeadingSec * sampleRate);
-        const activeLength = endIndex - startIndex;
-        const newLength = targetLeadingSamples + activeLength;
-
+        const targetLeadingSamples = Math.floor(targetLeadingSec * sampleRate); const activeLength = endIndex - startIndex; const newLength = targetLeadingSamples + activeLength;
         const newBuffer = audioCtx.createBuffer(audioBuffer.numberOfChannels, newLength, sampleRate);
-
-        for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
-            const newChannelData = newBuffer.getChannelData(i);
-            const oldChannelData = audioBuffer.getChannelData(i);
-            
-            newChannelData.set(oldChannelData.subarray(startIndex, endIndex), targetLeadingSamples);
-        }
-
+        for (let i = 0; i < audioBuffer.numberOfChannels; i++) { const newChannelData = newBuffer.getChannelData(i); const oldChannelData = audioBuffer.getChannelData(i); newChannelData.set(oldChannelData.subarray(startIndex, endIndex), targetLeadingSamples); }
         return audioBufferToWav(newBuffer);
     }
 
     function audioBufferToWav(buffer) {
-        const numOfChan = buffer.numberOfChannels;
-        const length = buffer.length * numOfChan * 2 + 44;
-        const bufferArray = new ArrayBuffer(length);
-        const view = new DataView(bufferArray);
-        const sampleRate = buffer.sampleRate;
-        let offset = 0, pos = 0;
-
-        function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
-        function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
-
-        setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157); 
-        setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(numOfChan);
-        setUint32(sampleRate); setUint32(sampleRate * 2 * numOfChan); 
-        setUint16(numOfChan * 2); setUint16(16); setUint32(0x61746164); 
-        setUint32(length - pos - 4);
-
-        let channels = [];
-        for (let i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
-
-        while(offset < buffer.length) {
-            for (let i = 0; i < numOfChan; i++) {
-                let sample = Math.max(-1, Math.min(1, channels[i][offset]));
-                sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
-                view.setInt16(pos, sample, true); pos += 2;
-            }
-            offset++;
-        }
+        const numOfChan = buffer.numberOfChannels; const length = buffer.length * numOfChan * 2 + 44; const bufferArray = new ArrayBuffer(length); const view = new DataView(bufferArray); const sampleRate = buffer.sampleRate; let offset = 0, pos = 0;
+        function setUint16(data) { view.setUint16(pos, data, true); pos += 2; } function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
+        setUint32(0x46464952); setUint32(length - 8); setUint32(0x45564157); setUint32(0x20746d66); setUint32(16); setUint16(1); setUint16(numOfChan); setUint32(sampleRate); setUint32(sampleRate * 2 * numOfChan); setUint16(numOfChan * 2); setUint16(16); setUint32(0x61746164); setUint32(length - pos - 4);
+        let channels = []; for (let i = 0; i < buffer.numberOfChannels; i++) channels.push(buffer.getChannelData(i));
+        while(offset < buffer.length) { for (let i = 0; i < numOfChan; i++) { let sample = Math.max(-1, Math.min(1, channels[i][offset])); sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0; view.setInt16(pos, sample, true); pos += 2; } offset++; }
         return new Blob([bufferArray], { type: "audio/wav" });
     }
 
@@ -1485,85 +1061,17 @@ function selectCloudCategory(btnElement, categoryName) {
     function openOverlay(id) { document.getElementById(id).style.display = 'flex'; }
     function closeOverlay(id) { document.getElementById(id).style.display = 'none'; }
 
-    function showWaveformMode() {
-        const kor = document.getElementById('displayKor');
-        const waveBtn = document.getElementById('btnWaveform');
-        const saveBtn = document.getElementById('btnSaveVoice');
-        const container = document.getElementById('waveformContainer');
+    function showWaveformMode() { const kor = document.getElementById('displayKor'); const waveBtn = document.getElementById('btnWaveform'); const saveBtn = document.getElementById('btnSaveVoice'); const container = document.getElementById('waveformContainer'); kor.classList.add('hidden'); waveBtn.classList.remove('hidden'); waveBtn.classList.add('active'); isWaveformActive = true; container.style.display = 'flex'; if (saveBtn) saveBtn.style.display = 'flex'; initAudioContext(); drawIdleWaveform('nativeCanvas'); drawIdleWaveform('myCanvas'); syncDrawWaveforms(); updateToggleButtonsUI(); }
+    function showKorMode() { const kor = document.getElementById('displayKor'); const waveBtn = document.getElementById('btnWaveform'); const saveBtn = document.getElementById('btnSaveVoice'); const container = document.getElementById('waveformContainer'); isWaveformActive = false; waveBtn.classList.remove('active'); waveBtn.classList.add('hidden'); container.style.display = 'none'; if (saveBtn) saveBtn.style.display = 'none'; cancelAnimationFrame(visualizerAnimationId); kor.classList.remove('hidden'); updateToggleButtonsUI(); }
 
-        kor.classList.add('hidden');
-        waveBtn.classList.remove('hidden');
-        waveBtn.classList.add('active');
-
-        isWaveformActive = true;
-        container.style.display = 'flex';
-        if (saveBtn) saveBtn.style.display = 'flex';
-
-        initAudioContext();
-        drawIdleWaveform('nativeCanvas');
-        drawIdleWaveform('myCanvas');
-        syncDrawWaveforms();
-
-        updateToggleButtonsUI();
-    }
-
-    function showKorMode() {
-        const kor = document.getElementById('displayKor');
-        const waveBtn = document.getElementById('btnWaveform');
-        const saveBtn = document.getElementById('btnSaveVoice');
-        const container = document.getElementById('waveformContainer');
-
-        isWaveformActive = false;
-        waveBtn.classList.remove('active');
-        waveBtn.classList.add('hidden');
-        container.style.display = 'none';
-        if (saveBtn) saveBtn.style.display = 'none';
-        cancelAnimationFrame(visualizerAnimationId);
-
-        kor.classList.remove('hidden');
-        updateToggleButtonsUI();
-    }
-
-    const flashcard = document.querySelector('.flashcard');
-    let fcStartX = 0, fcStartY = 0;
-    let isFcSwiping = false;
-
-    flashcard.addEventListener('touchstart', e => {
-        fcStartX = e.touches[0].clientX;
-        fcStartY = e.touches[0].clientY;
-        isFcSwiping = false;
-        flashcard.style.transition = 'none';
-    }, { passive: true });
-
-    flashcard.addEventListener('touchmove', e => {
-        let dx = e.touches[0].clientX - fcStartX;
-        let dy = e.touches[0].clientY - fcStartY;
-        
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
-            e.preventDefault(); 
-            isFcSwiping = true;
-            flashcard.style.transform = `translateX(${dx}px)`;
-            flashcard.classList.add('swiping');
-        }
-    }, { passive: false });
-
+    const flashcard = document.querySelector('.flashcard'); let fcStartX = 0, fcStartY = 0; let isFcSwiping = false;
+    flashcard.addEventListener('touchstart', e => { fcStartX = e.touches[0].clientX; fcStartY = e.touches[0].clientY; isFcSwiping = false; flashcard.style.transition = 'none'; }, { passive: true });
+    flashcard.addEventListener('touchmove', e => { let dx = e.touches[0].clientX - fcStartX; let dy = e.touches[0].clientY - fcStartY; if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) { e.preventDefault(); isFcSwiping = true; flashcard.style.transform = `translateX(${dx}px)`; flashcard.classList.add('swiping'); } }, { passive: false });
     flashcard.addEventListener('touchend', e => {
         flashcard.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s';
-        
-        let dx = e.changedTouches[0].clientX - fcStartX;
-        let dy = e.changedTouches[0].clientY - fcStartY;
-
-        if (isFcSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-            if (dx < -50) {
-                showWaveformMode();
-            } else if (dx > 50) {
-                showKorMode();
-            }
-        }
-        
-        flashcard.style.transform = `translateX(0px)`;
-        flashcard.classList.remove('swiping');
-        setTimeout(() => { isFcSwiping = false; }, 50);
+        let dx = e.changedTouches[0].clientX - fcStartX; let dy = e.changedTouches[0].clientY - fcStartY;
+        if (isFcSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) { if (dx < -50) { showWaveformMode(); } else if (dx > 50) { showKorMode(); } }
+        flashcard.style.transform = `translateX(0px)`; flashcard.classList.remove('swiping'); setTimeout(() => { isFcSwiping = false; }, 50);
     });
 
     window.addEventListener('DOMContentLoaded', () => {
