@@ -160,20 +160,21 @@
         @keyframes pulse-listen { 0% { box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.3); } 70% { box-shadow: 0 0 0 15px rgba(74, 144, 226, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 144, 226, 0); } }
         @keyframes pulse-native { 0% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0.3); } 70% { box-shadow: 0 0 0 15px rgba(0, 150, 136, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0); } }
 
-        .mode-btn.recording .mode-icon { 
-            animation: pulse-record 1.5s infinite; 
-            color: var(--danger); 
-            background-color: rgba(232, 65, 24, 0.1);
+        .mode-btn.recording .mode-icon {
+            color: var(--danger);
+            animation: pulse-record 1.5s infinite;
         }
-        .mode-btn.listening .mode-icon { 
-            animation: pulse-listen 1.5s infinite; 
+
+        /* 2. Listening 버튼 (푸른색) */
+        .mode-btn.listening .mode-icon {
             color: var(--primary);
-            background-color: rgba(74, 144, 226, 0.1);
+            animation: pulse-listen 1.5s infinite;
         }
-        .mode-btn.native .mode-icon { 
-            animation: pulse-native 1.5s infinite; 
-            color: #009688; 
-            background-color: rgba(0, 150, 136, 0.1);
+
+        /* 3. Native 버튼 (청록색) */
+        .mode-btn.native .mode-icon {
+            color: #009688;
+            animation: pulse-native 1.5s infinite;
         }
         
         #listContent { overflow: hidden; }
