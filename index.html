@@ -161,20 +161,16 @@
         @keyframes pulse-native { 0% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0.3); } 70% { box-shadow: 0 0 0 15px rgba(0, 150, 136, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0); } }
 
         .mode-btn.recording .mode-icon {
-            color: var(--danger);
-            animation: pulse-record 1.5s infinite;
+            color: var(--danger) !important;
+            animation: pulse-record 1.5s infinite !important;
         }
-
-        /* 2. Listening 버튼 (푸른색) */
         .mode-btn.listening .mode-icon {
-            color: var(--primary);
-            animation: pulse-listen 1.5s infinite;
+            color: var(--primary) !important;
+            animation: pulse-listen 1.5s infinite !important;
         }
-
-        /* 3. Native 버튼 (청록색) */
         .mode-btn.native .mode-icon {
-            color: #009688;
-            animation: pulse-native 1.5s infinite;
+            color: #009688 !important;
+            animation: pulse-native 1.5s infinite !important;
         }
         
         #listContent { overflow: hidden; }
