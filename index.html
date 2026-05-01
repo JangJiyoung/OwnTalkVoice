@@ -73,7 +73,8 @@
         .content-area.active { display: flex; }
 
         #studyContent { overflow-y: auto; padding: 20px; align-items: center; }
-        .flashcard { width: 100%; background: var(--card-bg); border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; display: flex; flex-direction: column; justify-content: center; min-height: 220px; box-sizing: border-box; flex-shrink: 0; touch-action: pan-y; }
+        .flashcard { width: 100%; background: var(--card-bg); border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; margin-bottom: 20px; display: flex; flex-direction: column; justify-content: center; min-height: 220px; box-sizing: border-box; flex-shrink: 0; touch-action: pan-y; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s; }
+        .flashcard.swiping { background-color: #eef5fc; transform: scale(1); }
         #displayEng { font-size: 26px; font-weight: 800; margin-bottom: 15px; color: #222; word-break: keep-all; }
         #displayEng.hidden { display: none; }
         #displayKor { font-size: 17px; color: #777; transition: 0.2s; min-height: 25px; word-break: keep-all; }
@@ -1366,10 +1367,13 @@
 
     const flashcard = document.querySelector('.flashcard');
     let fcStartX = 0, fcStartY = 0;
+    let isFcSwiping = false;
 
     flashcard.addEventListener('touchstart', e => {
         fcStartX = e.touches[0].clientX;
         fcStartY = e.touches[0].clientY;
+        isFcSwiping = false;
+        flashcard.style.transition = 'none';
     }, { passive: true });
 
     flashcard.addEventListener('touchmove', e => {
@@ -1378,20 +1382,29 @@
         
         if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
             e.preventDefault(); 
+            isFcSwiping = true;
+            flashcard.style.transform = `translateX(${dx}px)`;
+            flashcard.classList.add('swiping');
         }
     }, { passive: false });
 
     flashcard.addEventListener('touchend', e => {
+        flashcard.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s';
+        
         let dx = e.changedTouches[0].clientX - fcStartX;
         let dy = e.changedTouches[0].clientY - fcStartY;
 
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (isFcSwiping && Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
             if (dx < -50) {
                 showWaveformMode();
             } else if (dx > 50) {
                 showKorMode();
             }
         }
+        
+        flashcard.style.transform = `translateX(0px)`;
+        flashcard.classList.remove('swiping');
+        setTimeout(() => { isFcSwiping = false; }, 50);
     });
 
     window.addEventListener('DOMContentLoaded', () => {
