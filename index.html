@@ -721,9 +721,20 @@
     }
 
     function selectCloudCategory(btnElement, categoryName) {
+        // 현재 클릭한 버튼이 이미 선택된 상태인지 확인합니다.
+        const isAlreadySelected = btnElement.classList.contains('selected');
+        
+        // 1. 먼저 모든 버튼의 선택 상태를 초기화합니다.
         document.querySelectorAll('.cloud-cat-btn').forEach(btn => btn.classList.remove('selected'));
-        btnElement.classList.add('selected');
-        document.getElementById('selectedCloudCategory').value = categoryName;
+        
+        if (isAlreadySelected) {
+            // 2-A. 이미 선택된 버튼을 다시 누른 경우: 선택 해제 및 값 비우기
+            document.getElementById('selectedCloudCategory').value = "";
+        } else {
+            // 2-B. 새로운 버튼을 누른 경우: 선택 효과 적용 및 값 저장
+            btnElement.classList.add('selected');
+            document.getElementById('selectedCloudCategory').value = categoryName;
+        }
     }
 
     function setStars(level) { document.getElementById('inputLevel').value = level; const stars = document.getElementById('starContainer').children; for(let i=0; i<3; i++) stars[i].innerText = i < level ? '★' : '☆'; }
