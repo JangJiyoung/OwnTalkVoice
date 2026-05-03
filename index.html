@@ -605,8 +605,6 @@
             }
         }
         loadVoices(); applySettings(!resumeOffset); renderList();
-        
-        checkInitialPermissionFlow();
     }
 
     function checkInitialPermissionFlow() {
@@ -1825,7 +1823,19 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         init().catch(e => { console.error("데이터베이스 초기화 에러:", e); showToast("DB 로드 실패."); }); 
-        setTimeout(() => { const splash = document.getElementById('splashScreen'); if(splash) { splash.style.opacity = '0'; setTimeout(() => { splash.style.display = 'none'; }, 400); } }, 1200);
+        setTimeout(() => { 
+            const splash = document.getElementById('splashScreen'); 
+            if(splash) { 
+                splash.style.opacity = '0'; 
+                setTimeout(() => { 
+                    splash.style.display = 'none'; 
+                    // 스플래시 화면이 완전히 사라진 후 권한 안내 실행
+                    checkInitialPermissionFlow();
+                }, 400); 
+            } else {
+                checkInitialPermissionFlow();
+            }
+        }, 1200);
     });
 </script>
 </body>
