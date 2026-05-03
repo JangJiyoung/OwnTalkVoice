@@ -159,7 +159,10 @@
         }
         .mode-icon { width: 50px; height: 50px; border-radius: 50%; background: #f4f6f8; display: flex; justify-content: center; align-items: center; color: var(--primary); transition: 0.3s; }
 
-         /* 버튼 작동 애니메이션 */
+        /* 저장된 내 목소리가 있을 때 표시할 색상 클래스 */
+        .mode-btn.has-saved-voice .mode-icon { background: #ebd8b7; color: #b57a2a; }
+
+        /* 버튼 작동 애니메이션 (has-saved-voice보다 아래 있어야 애니메이션 덮어쓰기가 원활함) */
         .mode-btn.recording .mode-icon { background: #ffebee; color: var(--danger); animation: pulse-record 1.5s infinite; }
         .mode-btn.listening .mode-icon { background: #e3f2fd; color: var(--primary); animation: pulse-listen 1.5s infinite; }
         .mode-btn.native .mode-icon { background: #e0f2f1; color: #009688; animation: pulse-native 1.5s infinite; }
@@ -350,7 +353,7 @@
     <div id="deleteConfirmModal" class="overlay" style="z-index: 300;">
         <div class="modal" style="width: 80%; max-width: 320px; text-align: center;">
             <div class="modal-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;"><span style="font-size: 20px; color: var(--danger); font-weight: 800;">문장 삭제</span></div>
-            <div class="modal-body" style="color: #666; font-size: 15px; line-height: 1.5; padding: 15px 20px 25px;">이 문장을 정말 삭제하시겠습니까?<br>삭제된 데이터는 복구할 수 복구할 수 없습니다.</div>
+            <div class="modal-body" style="color: #666; font-size: 15px; line-height: 1.5; padding: 15px 20px 25px;">이 문장을 정말 삭제하시겠습니까?<br>삭제된 데이터는 복구할 수 없습니다.</div>
             <div class="modal-footer" style="display: flex; flex-direction: row; gap: 10px; padding-top: 0;">
                 <button class="btn-del" style="flex: 1; background: #f4f6f8; color: #555; border: none; padding: 14px; font-size: 15px;" onclick="closeOverlay('deleteConfirmModal')">취소</button>
                 <button class="btn-del" style="flex: 1; padding: 14px; font-size: 15px; background: #ffebee; color: var(--danger); border: none;" onclick="executeDelete()">삭제</button>
@@ -519,7 +522,6 @@
     let mediaRecorder = null, audioChunks = [], audioUrl = null, audioStream = null; 
     let currentModalTab = 'single';
     
-    // 🌟 추가된 전역 변수들: 잠금장치(Lock)와 세션 관리
     let toastTimer = null; let studyOffset = 0; let isActionPaused = false; let remainingTime = 0; 
     let audioSessionId = 0; 
     let isActionLocked = false; 
@@ -538,7 +540,6 @@
     let currentWaveMaxDuration = 2.0;
 
     function stopAllAudio() {
-        // 🌟 기존에 진행 중이던 비동기 요청(API 다운로드 대기 등)을 모두 무효화합니다.
         audioSessionId++; 
         
         if (currentAudio) {
@@ -555,7 +556,7 @@
         if(btnNative) btnNative.classList.remove('native');
         
         isActionPaused = false;
-        isActionLocked = false; // 🌟 어떠한 상황이든 오디오를 멈추면 잠금을 해제합니다.
+        isActionLocked = false; 
     }
 
     function loadVoices() {
@@ -1124,12 +1125,25 @@
 
         if(studySentences.length === 0) {
             document.getElementById('displayEng').innerText = "학습할 문장이 없습니다."; document.getElementById('displayKor').innerText = "모두 암기했거나 문장이 없습니다.";
-            document.getElementById('statText').innerText = `0/0`; document.getElementById('progressFill').style.width = `0%`; return;
+            document.getElementById('statText').innerText = `0/0`; document.getElementById('progressFill').style.width = `0%`; 
+            
+            // 저장된 음성 UI 해제
+            document.getElementById('btnListening').classList.remove('has-saved-voice');
+            return;
         }
         const s = studySentences[currentIndex];
         document.getElementById('displayEng').innerText = s.eng; document.getElementById('displayKor').innerText = s.kor;
         document.getElementById('statText').innerText = `${currentIndex + 1}/${studySentences.length}`;
         document.getElementById('progressFill').style.width = `${((currentIndex+1)/studySentences.length)*100}%`;
+        
+        // 🌟 저장된 음성이 있다면 Listening 버튼 색상 변경 UI 적용
+        const btnListen = document.getElementById('btnListening');
+        if (s.savedVoice) {
+            btnListen.classList.add('has-saved-voice');
+        } else {
+            btnListen.classList.remove('has-saved-voice');
+        }
+
         updateToggleButtonsUI();
         
         if (isPlaying) { 
@@ -1311,6 +1325,9 @@
             const target = rawSentences.find(r => r.id === s.id);
             if (target) target.savedVoice = recordedBlob;
             
+            // 🌟 저장 성공 시 즉시 UI(버튼 색상) 업데이트
+            document.getElementById('btnListening').classList.add('has-saved-voice');
+
             showToast("이 문장에 내 목소리가 저장되었습니다!");
         } catch (error) {
             console.error("음성 저장 실패:", error);
@@ -1318,19 +1335,16 @@
         }
     }
 
-    // 🌟 1. 네이티브 버튼 중복 호출 및 겹침 방지 처리
     async function speakCurrent() {
-        // 이미 진행 중인 오디오 작업이 있다면 완벽히 무시 (먹통 방지)
         if (isActionLocked) return; 
         
-        stopAllAudio(); // 혹시나 남아있는 상태를 초기화
-        const currentSession = audioSessionId; // 🌟 현재 작업 세션 번호 저장
+        stopAllAudio(); 
+        const currentSession = audioSessionId; 
         
         const s = studySentences[currentIndex];
         const textToSpeak = s?.eng;
         if (!textToSpeak) return;
 
-        // 잠금 걸기
         isActionLocked = true;
         remainingTime = waitSeconds; 
         isActionPaused = true;
@@ -1341,7 +1355,6 @@
 
         const useSavedVoice = document.getElementById('setUseSavedVoice').checked;
 
-        // 🌟 종료 시 락(Lock) 해제 및 화면 일시정지 해제 함수 (세션 비교)
         const releaseLock = () => {
             if (audioSessionId === currentSession) {
                 remainingTime = waitSeconds; 
@@ -1352,7 +1365,6 @@
             }
         };
 
-        // 내 저장음성 우선 모드일 경우
         if (useSavedVoice && s.savedVoice) {
             try {
                 const savedUrl = URL.createObjectURL(s.savedVoice);
@@ -1375,7 +1387,6 @@
             }
         }
 
-        // 이미 캐시된 네이티브 음성이 있을 경우
         if (s.nativeVoice) {
             try {
                 const cachedUrl = URL.createObjectURL(s.nativeVoice);
@@ -1398,14 +1409,12 @@
             }
         }
 
-        // 클라우드 API를 호출해야 하는 경우
         try {
             const response = await fetch(GAS_TTS_URL, {
                 method: 'POST', body: JSON.stringify({ text: textToSpeak })
             });
             const data = await response.json();
             
-            // 🌟 통신 대기 중에 다른 버튼(다음 문장 등)을 눌러서 세션이 변경되었다면, 응답을 과감히 버림!
             if (audioSessionId !== currentSession) return;
 
             if (data.audioContent) {
@@ -1439,14 +1448,12 @@
 
             } else { throw new Error("No audio content"); }
         } catch (error) {
-            // 실패했을 때도 세션이 유지 중일 때만 백업 TTS 실행
             if (audioSessionId !== currentSession) return;
             console.error("Cloud TTS 실패:", error);
             triggerFallbackTTS(textToSpeak, currentSession); 
         }
     }
 
-    // 🌟 2. 마이크 녹음 버튼 잠금장치 처리
     async function toggleRecord() {
         const isStopping = mediaRecorder && mediaRecorder.state === "recording";
         
@@ -1456,13 +1463,13 @@
             btn.classList.remove('recording'); 
             if (audioStream) audioStream.getTracks().forEach(track => track.stop());
             cancelAnimationFrame(visualizerAnimationId);
-            isActionLocked = false; // 중지하면 락 해제
+            isActionLocked = false; 
         } else {
-            if (isActionLocked) return; // 오디오 재생 중 녹음 차단
+            if (isActionLocked) return; 
             
             stopAllAudio();
             const currentSession = audioSessionId;
-            isActionLocked = true; // 녹음 중 다른 동작 차단
+            isActionLocked = true; 
             remainingTime = waitSeconds; 
             isActionPaused = true;
 
@@ -1486,7 +1493,6 @@
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
 
                 mediaRecorder.onstop = async () => { 
-                    // 녹음 도중 [다음] 버튼 등으로 화면이 넘어갔다면 녹음 파일 버림
                     if (audioSessionId !== currentSession) return; 
 
                     recordedBlob = new Blob(audioChunks, { type: mimeType });
@@ -1509,7 +1515,7 @@
                         } catch(e) { console.error("My Waveform Error:", e); }
                     }
 
-                    isActionLocked = false; // 락 해제
+                    isActionLocked = false; 
                     remainingTime = waitSeconds;
                     if(document.getElementById('setAutoPlayRec').checked) playMyVoice(); 
                     else isActionPaused = false; 
@@ -1525,22 +1531,53 @@
         }
     }
 
-    // 🌟 3. 내 음성 듣기 버튼 잠금장치 처리
+    // 🌟 2. 방금 녹음한 파일이 없어도 과거에 저장된 파일이 있으면 불러오기
     async function playMyVoice() { 
-        if (isActionLocked) return; // 중복 클릭 차단
+        if (isActionLocked) return; 
 
-        if(audioUrl) {
+        const s = studySentences[currentIndex];
+        let playTargetBlob = null;
+        let isSavedVoiceMode = false;
+
+        // 우선순위 1: 지금 방금 녹음한 임시 파일 (audioUrl)
+        if (audioUrl) {
+            playTargetBlob = recordedBlob; 
+        } 
+        // 우선순위 2: 과거에 버튼을 눌러 DB에 영구 저장된 파일 (s.savedVoice)
+        else if (s && s.savedVoice) {
+            playTargetBlob = s.savedVoice;
+            isSavedVoiceMode = true;
+        }
+
+        // 둘 중 하나라도 존재하면 플레이 진행
+        if(playTargetBlob || audioUrl) {
             stopAllAudio();
             const currentSession = audioSessionId;
-            isActionLocked = true; // 락 시작
+            isActionLocked = true; 
             remainingTime = waitSeconds;
             isActionPaused = true; 
             
             const btnListening = document.getElementById('btnListening');
             btnListening.classList.add('listening');
 
-            currentAudio = new Audio(audioUrl);
+            // 재생할 파일의 URL 생성
+            let playTargetUrl = audioUrl; 
+            if (isSavedVoiceMode) {
+                playTargetUrl = URL.createObjectURL(playTargetBlob);
+            }
+
+            currentAudio = new Audio(playTargetUrl);
             
+            // 만약 저장된 파일을 불러온 거라면, 파형을 그리기 위해 AudioBuffer 변환
+            if (isSavedVoiceMode && isWaveformActive) {
+                try {
+                    if (!audioCtx) initAudioContext();
+                    const arrayBuffer = await playTargetBlob.arrayBuffer();
+                    myAudioBuffer = await audioCtx.decodeAudioData(arrayBuffer.slice(0));
+                    syncDrawWaveforms();
+                } catch(e) { console.error("Saved Voice Waveform Error:", e); }
+            }
+
             const release = () => {
                 if (audioSessionId === currentSession) {
                     remainingTime = waitSeconds; 
@@ -1549,6 +1586,8 @@
                     currentAudio = null; 
                     isActionLocked = false;
                 }
+                // 메모리 누수 방지용 Blob URL 해제
+                if (isSavedVoiceMode) URL.revokeObjectURL(playTargetUrl);
             };
 
             currentAudio.onended = release;
@@ -1558,10 +1597,12 @@
             
             const playPromise = currentAudio.play();
             if (playPromise !== undefined) playPromise.catch(error => release());
-        } else { showToast("먼저 'Speaking' 버튼을 눌러 목소리를 녹음해주세요."); }
+        } else { 
+            // 둘 다 없을 경우 기존 안내 메시지 출력
+            showToast("먼저 'Speaking' 버튼을 눌러 목소리를 녹음해주세요."); 
+        }
     }
 
-    // 🌟 4. 기본 기기 TTS 장애 복구 시 잠금장치 반영
     function triggerFallbackTTS(textToSpeak, session) {
         if (!window.speechSynthesis) { 
             if (audioSessionId === session) {
