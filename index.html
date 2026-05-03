@@ -350,7 +350,7 @@
     <div id="deleteConfirmModal" class="overlay" style="z-index: 300;">
         <div class="modal" style="width: 80%; max-width: 320px; text-align: center;">
             <div class="modal-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;"><span style="font-size: 20px; color: var(--danger); font-weight: 800;">문장 삭제</span></div>
-            <div class="modal-body" style="color: #666; font-size: 15px; line-height: 1.5; padding: 15px 20px 25px;">이 문장을 정말 삭제하시겠습니까?<br>삭제된 데이터는 복구할 수 없습니다.</div>
+            <div class="modal-body" style="color: #666; font-size: 15px; line-height: 1.5; padding: 15px 20px 25px;">이 문장을 정말 삭제하시겠습니까?<br>삭제된 데이터는 복구할 수 복구할 수 없습니다.</div>
             <div class="modal-footer" style="display: flex; flex-direction: row; gap: 10px; padding-top: 0;">
                 <button class="btn-del" style="flex: 1; background: #f4f6f8; color: #555; border: none; padding: 14px; font-size: 15px;" onclick="closeOverlay('deleteConfirmModal')">취소</button>
                 <button class="btn-del" style="flex: 1; padding: 14px; font-size: 15px; background: #ffebee; color: var(--danger); border: none;" onclick="executeDelete()">삭제</button>
@@ -505,13 +505,9 @@
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio, { passive: true });
 
-    // Dexie DB 설정 (category 필드 추가 버전 업데이트 포함)
     const db = new Dexie("EnglishStudyDB");
     
-    // 버전 1: 기존 스키마 (업데이트 충돌 방지를 위해 그대로 유지)
     db.version(1).stores({ sentences: '++id, eng, kor, importance, isMemorized', settings: 'id, random, nativeFirst, autoNext, autoPlayRec, limit, waitTime' });
-    
-    // 버전 2: category 필드 추가 및 위치 변경
     db.version(2).stores({ sentences: '++id, category, eng, kor, importance, isMemorized' }).upgrade(tx => {
         return tx.sentences.toCollection().modify(sentence => {
             if (!sentence.category) sentence.category = '기본';
@@ -519,10 +515,14 @@
     });
 
     let rawSentences = [], studySentences = [], currentIndex = 0, isPlaying = false, playTimer = null, waitSeconds = 3;
-    let currentStudyCategory = null; // 선택된 카테고리 필터 유지용 변수 추가
+    let currentStudyCategory = null; 
     let mediaRecorder = null, audioChunks = [], audioUrl = null, audioStream = null; 
     let currentModalTab = 'single';
+    
+    // 🌟 추가된 전역 변수들: 잠금장치(Lock)와 세션 관리
     let toastTimer = null; let studyOffset = 0; let isActionPaused = false; let remainingTime = 0; 
+    let audioSessionId = 0; 
+    let isActionLocked = false; 
 
     let currentAudio = null;
     let isWaveformActive = false;
@@ -538,6 +538,9 @@
     let currentWaveMaxDuration = 2.0;
 
     function stopAllAudio() {
+        // 🌟 기존에 진행 중이던 비동기 요청(API 다운로드 대기 등)을 모두 무효화합니다.
+        audioSessionId++; 
+        
         if (currentAudio) {
             currentAudio.pause();
             currentAudio.currentTime = 0;
@@ -552,6 +555,7 @@
         if(btnNative) btnNative.classList.remove('native');
         
         isActionPaused = false;
+        isActionLocked = false; // 🌟 어떠한 상황이든 오디오를 멈추면 잠금을 해제합니다.
     }
 
     function loadVoices() {
@@ -594,7 +598,7 @@
             document.getElementById('setAutoPlayRec').checked = s.autoPlayRec;
             document.getElementById('setLimit').value = s.limit; document.getElementById('limitVal').innerText = s.limit;
             document.getElementById('setWaitTime').value = s.waitTime; document.getElementById('waitVal').innerText = s.waitTime; 
-            document.getElementById('setShowCategoryInList').checked = s.showCategoryInList !== false; // 기본값 true로 설정
+            document.getElementById('setShowCategoryInList').checked = s.showCategoryInList !== false; 
             waitSeconds = s.waitTime;
             
             if (s.lastStudyId && !s.random) {
@@ -638,13 +642,13 @@
             nativeFirst: document.getElementById('setNativeFirst').checked, 
             autoNext: document.getElementById('setAutoNext').checked, 
             autoPlayRec: document.getElementById('setAutoPlayRec').checked, 
-            showCategoryInList: document.getElementById('setShowCategoryInList').checked, // 신규 추가됨
+            showCategoryInList: document.getElementById('setShowCategoryInList').checked, 
             limit: parseInt(document.getElementById('setLimit').value), 
             waitTime: waitSeconds, 
             lastStudyId: lastStudyId
         });
         applySettings(true);
-        renderList(); // 카테고리 표시 옵션 UI 즉시 업데이트
+        renderList(); 
     }
 
     async function toggleMemorized(id, currentVal, e) {
@@ -653,7 +657,6 @@
         showToast(!currentVal ? "암기 문장에서 제외되었습니다." : "다시 학습 문장에 포함됩니다.");
     }
 
-    // --- 커스텀 드롭다운 관련 로직 시작 ---
     function toggleDropdown() {
         document.getElementById('dropdownOptions').classList.toggle('show');
     }
@@ -675,7 +678,6 @@
         document.getElementById('dropdownOptions').classList.remove('show');
         handleListTypeChange();
     }
-    // --- 커스텀 드롭다운 관련 로직 끝 ---
 
     function handleListTypeChange() {
         const listType = document.getElementById('listTypeSelect').value;
@@ -751,7 +753,7 @@
         Object.keys(categoryCounts).forEach(cat => {
             const count = categoryCounts[cat];
             const div = document.createElement('div'); div.className = 'sentence-card'; 
-            div.style.padding = '12px 20px'; // 카테고리 카드 높이를 2/3 수준으로 축소
+            div.style.padding = '12px 20px'; 
             div.innerHTML = `
                 <div style="flex: 1; overflow: hidden;">
                     <strong style="font-size:16px; color:#222; display:block; margin-bottom: 4px;">📚 ${cat}</strong>
@@ -777,7 +779,6 @@
                 setTimeout(() => { isSwiping = false; }, 50);
             });
             
-            // 카테고리 목록 항목 클릭 시 카테고리 수정 모달 띄우기
             div.addEventListener('click', e => { 
                 if (isSwiping) { e.preventDefault(); return; } 
                 openEditCategoryModal(cat); 
@@ -785,14 +786,12 @@
         });
     }
 
-    // 카테고리 수정 모달창 호출
     function openEditCategoryModal(catName) {
         document.getElementById('editOldCategoryName').value = catName;
         document.getElementById('inputCategoryName').value = catName;
         openOverlay('editCategoryModal');
     }
 
-    // 카테고리 이름 변경 저장
     async function saveCategoryName() {
         const oldName = document.getElementById('editOldCategoryName').value;
         const newName = document.getElementById('inputCategoryName').value.trim();
@@ -803,7 +802,6 @@
         }
         
         if (oldName !== newName) {
-            // 변경 대상 문장 추출 후 업데이트 (Dexie 업데이트 지원 처리)
             const targets = rawSentences.filter(s => (s.category || '기본') === oldName);
             for (let s of targets) {
                 await db.sentences.update(s.id, { category: newName });
@@ -821,16 +819,13 @@
         closeOverlay('editCategoryModal');
     }
 
-    // 카테고리 삭제 확인 모달 호출
     function confirmDeleteCategory() {
         openOverlay('deleteCategoryConfirmModal');
     }
 
-    // 카테고리 (및 하위 문장 전체) 삭제 실행
     async function executeDeleteCategory() {
         const catName = document.getElementById('editOldCategoryName').value;
         
-        // 삭제 대상 문장 추출 및 일괄 삭제
         const targets = rawSentences.filter(s => (s.category || '기본') === catName);
         const idsToDelete = targets.map(s => s.id);
         
@@ -838,7 +833,6 @@
         
         rawSentences = await db.sentences.toArray();
         
-        // 만약 현재 삭제한 카테고리를 학습 중이었다면 초기화
         if (currentStudyCategory === catName) {
             currentStudyCategory = null;
             studyOffset = 0;
@@ -876,7 +870,7 @@
             await applySettings(false); 
             switchTab('study', document.getElementById('tabStudy'));
         } else {
-            currentStudyCategory = null; // 특정 문장 선택 시 카테고리 필터 해제
+            currentStudyCategory = null; 
             const numId = parseInt(targetId);
             const sentence = rawSentences.find(s => s.id === numId);
             if (sentence && sentence.isMemorized) { 
@@ -897,7 +891,6 @@
         }
     }
     
-    // 탭 전환 및 클라우드 데이터 호출 처리
     function switchModalTab(tab) {
         currentModalTab = tab; 
         document.getElementById('tabBtnSingle').classList.toggle('active', tab === 'single');
@@ -913,7 +906,6 @@
         }
     }
 
-    // Firebase 카테고리 목록 불러오기
     async function loadCloudCategories() {
         const container = document.getElementById('cloudCategoryContainer');
         container.innerHTML = `
@@ -947,7 +939,6 @@
         }
     }
 
-    // 카테고리 선택 및 해제(토글) 처리
     function selectCloudCategory(btnElement, categoryName) {
         const hiddenInput = document.getElementById('selectedCloudCategory');
         
@@ -985,7 +976,6 @@
         openOverlay('editModal');
     }
 
-    // 데이터 저장/수정/삭제/다운로드 통합 처리
     async function handleData(action) {
         const editId = document.getElementById('editRowId').value;
         
@@ -1011,7 +1001,6 @@
                     if(p.length >= 2) list.push({ eng: p[0].trim(), kor: p.slice(1).join('/').trim(), importance: 1, isMemorized: false, category: '직접입력' }); 
                 }
                 
-                // 붙여넣기 한 여러 문장도 화면 출력 정렬(최신순)에 맞추기 위해 배열을 한 번 뒤집어 줍니다.
                 list.reverse(); 
 
                 if (list.length > 0) { await db.sentences.bulkAdd(list); showToast(`${list.length}개의 문장이 추가되었습니다.`); } 
@@ -1041,7 +1030,6 @@
                         }
                     });
 
-                    // 클라우드 데이터도 화면 출력 정렬에 맞추기 위해 배열을 한 번 뒤집어 줍니다.
                     newSentences.reverse(); 
 
                     if (newSentences.length > 0) {
@@ -1074,7 +1062,6 @@
         
         let temp = [...rawSentences].reverse().filter(s => !s.isMemorized); 
         
-        // 카테고리 필터 적용
         if (currentStudyCategory) {
             temp = temp.filter(s => s.category === currentStudyCategory);
         }
@@ -1093,7 +1080,6 @@
             if (studyOffset >= temp.length && temp.length > 0) studyOffset = studyOffset % temp.length; 
             studySentences = temp.slice(studyOffset, studyOffset + limit);
             
-            // 카테고리 지정 학습 중이 아닐 때만 갯수가 모자라면 다시 처음부터 채움 (카테고리 학습은 남은 갯수만 하고 종료하기 위함)
             if (studySentences.length < limit && temp.length > studySentences.length && !currentStudyCategory) {
                 const remain = limit - studySentences.length;
                 studySentences = studySentences.concat(temp.slice(0, remain));
@@ -1332,12 +1318,20 @@
         }
     }
 
+    // 🌟 1. 네이티브 버튼 중복 호출 및 겹침 방지 처리
     async function speakCurrent() {
-        stopAllAudio();
+        // 이미 진행 중인 오디오 작업이 있다면 완벽히 무시 (먹통 방지)
+        if (isActionLocked) return; 
+        
+        stopAllAudio(); // 혹시나 남아있는 상태를 초기화
+        const currentSession = audioSessionId; // 🌟 현재 작업 세션 번호 저장
+        
         const s = studySentences[currentIndex];
         const textToSpeak = s?.eng;
         if (!textToSpeak) return;
-    
+
+        // 잠금 걸기
+        isActionLocked = true;
         remainingTime = waitSeconds; 
         isActionPaused = true;
         initAudioContext();
@@ -1347,6 +1341,18 @@
 
         const useSavedVoice = document.getElementById('setUseSavedVoice').checked;
 
+        // 🌟 종료 시 락(Lock) 해제 및 화면 일시정지 해제 함수 (세션 비교)
+        const releaseLock = () => {
+            if (audioSessionId === currentSession) {
+                remainingTime = waitSeconds; 
+                isActionPaused = false; 
+                btnNative.classList.remove('native'); 
+                currentAudio = null; 
+                isActionLocked = false;
+            }
+        };
+
+        // 내 저장음성 우선 모드일 경우
         if (useSavedVoice && s.savedVoice) {
             try {
                 const savedUrl = URL.createObjectURL(s.savedVoice);
@@ -1359,8 +1365,8 @@
                     animatePlayhead(currentAudio, 'nativePlayhead');
                 }
 
-                currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(savedUrl); btnNative.classList.remove('native'); currentAudio = null; };
-                currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(savedUrl); btnNative.classList.remove('native'); currentAudio = null; };
+                currentAudio.onended = () => { URL.revokeObjectURL(savedUrl); releaseLock(); };
+                currentAudio.onerror = () => { URL.revokeObjectURL(savedUrl); releaseLock(); };
                 
                 await currentAudio.play();
                 return; 
@@ -1369,6 +1375,7 @@
             }
         }
 
+        // 이미 캐시된 네이티브 음성이 있을 경우
         if (s.nativeVoice) {
             try {
                 const cachedUrl = URL.createObjectURL(s.nativeVoice);
@@ -1381,8 +1388,8 @@
                     animatePlayhead(currentAudio, 'nativePlayhead');
                 }
 
-                currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(cachedUrl); btnNative.classList.remove('native'); currentAudio = null; };
-                currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(cachedUrl); btnNative.classList.remove('native'); currentAudio = null; };
+                currentAudio.onended = () => { URL.revokeObjectURL(cachedUrl); releaseLock(); };
+                currentAudio.onerror = () => { URL.revokeObjectURL(cachedUrl); releaseLock(); };
                 
                 await currentAudio.play();
                 return; 
@@ -1391,12 +1398,16 @@
             }
         }
 
+        // 클라우드 API를 호출해야 하는 경우
         try {
             const response = await fetch(GAS_TTS_URL, {
                 method: 'POST', body: JSON.stringify({ text: textToSpeak })
             });
             const data = await response.json();
             
+            // 🌟 통신 대기 중에 다른 버튼(다음 문장 등)을 눌러서 세션이 변경되었다면, 응답을 과감히 버림!
+            if (audioSessionId !== currentSession) return;
+
             if (data.audioContent) {
                 const arrayBuffer = base64ToArrayBuffer(data.audioContent);
                 const nativeBlob = new Blob([arrayBuffer], { type: 'audio/mp3' });
@@ -1420,33 +1431,43 @@
                     } catch(e) { console.error("Native Waveform Error:", e); }
                 }
 
-                currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(audioUrlForTTS); btnNative.classList.remove('native'); currentAudio = null; };
-                currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; URL.revokeObjectURL(audioUrlForTTS); btnNative.classList.remove('native'); currentAudio = null; };
+                currentAudio.onended = () => { URL.revokeObjectURL(audioUrlForTTS); releaseLock(); };
+                currentAudio.onerror = () => { URL.revokeObjectURL(audioUrlForTTS); releaseLock(); };
                 
                 if (isWaveformActive) animatePlayhead(currentAudio, 'nativePlayhead');
                 await currentAudio.play();
 
             } else { throw new Error("No audio content"); }
         } catch (error) {
+            // 실패했을 때도 세션이 유지 중일 때만 백업 TTS 실행
+            if (audioSessionId !== currentSession) return;
             console.error("Cloud TTS 실패:", error);
-            triggerFallbackTTS(textToSpeak); 
+            triggerFallbackTTS(textToSpeak, currentSession); 
         }
     }
 
+    // 🌟 2. 마이크 녹음 버튼 잠금장치 처리
     async function toggleRecord() {
         const isStopping = mediaRecorder && mediaRecorder.state === "recording";
-        stopAllAudio();
         
-        remainingTime = waitSeconds; 
-        isActionPaused = true;
-
-        const btn = document.getElementById('btnRecord');
         if (isStopping) { 
             mediaRecorder.stop(); 
+            const btn = document.getElementById('btnRecord');
             btn.classList.remove('recording'); 
             if (audioStream) audioStream.getTracks().forEach(track => track.stop());
             cancelAnimationFrame(visualizerAnimationId);
+            isActionLocked = false; // 중지하면 락 해제
         } else {
+            if (isActionLocked) return; // 오디오 재생 중 녹음 차단
+            
+            stopAllAudio();
+            const currentSession = audioSessionId;
+            isActionLocked = true; // 녹음 중 다른 동작 차단
+            remainingTime = waitSeconds; 
+            isActionPaused = true;
+
+            const btn = document.getElementById('btnRecord');
+
             try {
                 initAudioContext();
                 audioStream = await navigator.mediaDevices.getUserMedia({ audio: true }); 
@@ -1465,6 +1486,9 @@
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
 
                 mediaRecorder.onstop = async () => { 
+                    // 녹음 도중 [다음] 버튼 등으로 화면이 넘어갔다면 녹음 파일 버림
+                    if (audioSessionId !== currentSession) return; 
+
                     recordedBlob = new Blob(audioChunks, { type: mimeType });
                     
                     let nativeSilenceSec = 0.05;
@@ -1485,6 +1509,7 @@
                         } catch(e) { console.error("My Waveform Error:", e); }
                     }
 
+                    isActionLocked = false; // 락 해제
                     remainingTime = waitSeconds;
                     if(document.getElementById('setAutoPlayRec').checked) playMyVoice(); 
                     else isActionPaused = false; 
@@ -1495,14 +1520,19 @@
                 showToast("마이크 권한이 필요합니다."); 
                 remainingTime = waitSeconds;
                 isActionPaused = false; 
+                isActionLocked = false;
             } 
         }
     }
 
+    // 🌟 3. 내 음성 듣기 버튼 잠금장치 처리
     async function playMyVoice() { 
+        if (isActionLocked) return; // 중복 클릭 차단
+
         if(audioUrl) {
             stopAllAudio();
-            
+            const currentSession = audioSessionId;
+            isActionLocked = true; // 락 시작
             remainingTime = waitSeconds;
             isActionPaused = true; 
             
@@ -1510,20 +1540,35 @@
             btnListening.classList.add('listening');
 
             currentAudio = new Audio(audioUrl);
-            currentAudio.onended = () => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; }; 
-            currentAudio.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; }; 
+            
+            const release = () => {
+                if (audioSessionId === currentSession) {
+                    remainingTime = waitSeconds; 
+                    isActionPaused = false; 
+                    btnListening.classList.remove('listening'); 
+                    currentAudio = null; 
+                    isActionLocked = false;
+                }
+            };
+
+            currentAudio.onended = release;
+            currentAudio.onerror = release;
             
             if (isWaveformActive) animatePlayhead(currentAudio, 'myPlayhead');
             
             const playPromise = currentAudio.play();
-            if (playPromise !== undefined) playPromise.catch(error => { remainingTime = waitSeconds; isActionPaused = false; btnListening.classList.remove('listening'); currentAudio = null; });
+            if (playPromise !== undefined) playPromise.catch(error => release());
         } else { showToast("먼저 'Speaking' 버튼을 눌러 목소리를 녹음해주세요."); }
     }
 
-    function triggerFallbackTTS(textToSpeak) {
+    // 🌟 4. 기본 기기 TTS 장애 복구 시 잠금장치 반영
+    function triggerFallbackTTS(textToSpeak, session) {
         if (!window.speechSynthesis) { 
-            remainingTime = waitSeconds;
-            isActionPaused = false; 
+            if (audioSessionId === session) {
+                remainingTime = waitSeconds;
+                isActionPaused = false; 
+                isActionLocked = false;
+            }
             return; 
         }
         
@@ -1532,8 +1577,17 @@
         currentUtterance.lang = 'en-US';
         if (engVoice) currentUtterance.voice = engVoice;
         
-        currentUtterance.onend = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); };
-        currentUtterance.onerror = () => { remainingTime = waitSeconds; isActionPaused = false; btnNative.classList.remove('native'); };
+        const release = () => {
+            if (audioSessionId === session) {
+                remainingTime = waitSeconds; 
+                isActionPaused = false; 
+                btnNative.classList.remove('native'); 
+                isActionLocked = false;
+            }
+        };
+
+        currentUtterance.onend = release;
+        currentUtterance.onerror = release;
         
         window.speechSynthesis.speak(currentUtterance);
     }
@@ -1829,7 +1883,6 @@
                 splash.style.opacity = '0'; 
                 setTimeout(() => { 
                     splash.style.display = 'none'; 
-                    // 스플래시 화면이 완전히 사라진 후 권한 안내 실행
                     checkInitialPermissionFlow();
                 }, 400); 
             } else {
