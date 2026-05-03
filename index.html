@@ -162,7 +162,7 @@
         /* 저장된 내 목소리가 있을 때 표시할 색상 클래스 (배경은 그대로, 아이콘 색상만 변경) */
         .mode-btn.has-saved-voice .mode-icon { color: #b57a2a; }
 
-        /* 버튼 작동 애니메이션 (has-saved-voice보다 아래 있어야 애니메이션 덮어쓰기가 원활함) */
+        /* 버튼 작동 애니메이션 */
         .mode-btn.recording .mode-icon { background: #ffebee; color: var(--danger); animation: pulse-record 1.5s infinite; }
         .mode-btn.listening .mode-icon { background: #e3f2fd; color: var(--primary); animation: pulse-listen 1.5s infinite; }
         .mode-btn.native .mode-icon { background: #e0f2f1; color: #009688; animation: pulse-native 1.5s infinite; }
@@ -448,7 +448,7 @@
                 </div>
                 
                 <div id="tabBulk" class="m-tab-content">
-                    <textarea id="inputBulk" class="bulk-textarea" placeholder="영어/한글 형식 참조 입력해주세요.&#10;(예: Hello/안녕하세요)"></textarea>
+                    <textarea id="inputBulk" class="bulk-textarea" placeholder="카테고리/영어/한글 형식으로 입력해주세요.&#10;(예: 인사/Hello/안녕하세요)"></textarea>
                 </div>
 
                 <div id="tabCloud" class="m-tab-content">
@@ -996,16 +996,58 @@
                 const bulkText = document.getElementById('inputBulk').value;
                 if(!bulkText.trim()) { showToast("추가할 내용을 붙여넣어 주세요."); return; }
                 
-                const lines = bulkText.split('\n'); const list = [];
+                const lines = bulkText.split('\n'); 
+                const list = [];
+                let hasError = false;
+
+                // 🌟 오늘 날짜 포맷팅 (YYYYMMDD 형식, 예: 20260503)
+                const today = new Date();
+                const dateString = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+
                 for (let l of lines) { 
+                    if(!l.trim()) continue; // 빈 줄은 무시
                     const p = l.split('/'); 
-                    if(p.length >= 2) list.push({ eng: p[0].trim(), kor: p.slice(1).join('/').trim(), importance: 1, isMemorized: false, category: '직접입력' }); 
+                    
+                    if (p.length >= 3) {
+                        // 카테고리/영어/한글 형식인 경우
+                        list.push({ 
+                            category: p[0].trim(),
+                            eng: p[1].trim(), 
+                            kor: p.slice(2).join('/').trim(), 
+                            importance: 1, 
+                            isMemorized: false 
+                        }); 
+                    } else if (p.length === 2) {
+                        // 카테고리 없이 영어/한글 형식만 있는 경우 (오늘 날짜 부여)
+                        list.push({ 
+                            category: dateString,
+                            eng: p[0].trim(), 
+                            kor: p.slice(1).join('/').trim(), 
+                            importance: 1, 
+                            isMemorized: false 
+                        }); 
+                    } else {
+                        // 슬래시가 없거나 형식이 전혀 맞지 않는 경우
+                        hasError = true;
+                        break; 
+                    }
                 }
                 
+                // 🌟 형식 오류가 하나라도 발견되면 중단
+                if (hasError) {
+                    showToast("문장이 보기와 같지 않습니다 다시한번 확인해 주세요");
+                    return; 
+                }
+
                 list.reverse(); 
 
-                if (list.length > 0) { await db.sentences.bulkAdd(list); showToast(`${list.length}개의 문장이 추가되었습니다.`); } 
-                else { showToast("추가할 문장을 찾지 못했습니다.\n'영어/한글' 형식을 확인해주세요."); return; }
+                if (list.length > 0) { 
+                    await db.sentences.bulkAdd(list); 
+                    showToast(`${list.length}개의 문장이 추가되었습니다.`); 
+                } else { 
+                    showToast("추가할 문장을 찾지 못했습니다.\n형식을 확인해주세요."); 
+                    return; 
+                }
 
             } else if (currentModalTab === 'cloud') {
                 const categoryName = document.getElementById('selectedCloudCategory').value;
@@ -1127,7 +1169,6 @@
             document.getElementById('displayEng').innerText = "학습할 문장이 없습니다."; document.getElementById('displayKor').innerText = "모두 암기했거나 문장이 없습니다.";
             document.getElementById('statText').innerText = `0/0`; document.getElementById('progressFill').style.width = `0%`; 
             
-            // 저장된 음성 UI 해제
             document.getElementById('btnListening').classList.remove('has-saved-voice');
             return;
         }
@@ -1136,7 +1177,6 @@
         document.getElementById('statText').innerText = `${currentIndex + 1}/${studySentences.length}`;
         document.getElementById('progressFill').style.width = `${((currentIndex+1)/studySentences.length)*100}%`;
         
-        // 🌟 저장된 음성이 있다면 Listening 버튼 색상 변경 UI 적용
         const btnListen = document.getElementById('btnListening');
         if (s.savedVoice) {
             btnListen.classList.add('has-saved-voice');
@@ -1325,7 +1365,6 @@
             const target = rawSentences.find(r => r.id === s.id);
             if (target) target.savedVoice = recordedBlob;
             
-            // 🌟 저장 성공 시 즉시 UI(버튼 색상) 업데이트
             document.getElementById('btnListening').classList.add('has-saved-voice');
 
             showToast("이 문장에 내 목소리가 저장되었습니다!");
