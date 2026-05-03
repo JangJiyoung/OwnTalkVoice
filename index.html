@@ -418,7 +418,7 @@
                 <div class="setting-row"><span>녹음 직후 바로 듣기</span><label class="switch"><input type="checkbox" id="setAutoPlayRec" checked><span class="slider"></span></label></div>
                 <div class="setting-">학습 환경</div>
                 <div class="setting-row"><span>목록에 카테고리 표시</span><label class="switch"><input type="checkbox" id="setShowCategoryInList" checked><span class="slider"></span></label></div>
-                <div class="setting-row"><span>1회 학습 문장 수</span><div style="display:flex; align-items:center; gap:10px;"><input type="range" id="setLimit" min="5" max="100" step="5" value="20" oninput="document.getElementById('limitVal').innerText=this.value"><span id="limitVal" style="font-weight:bold; color:var(--primary); width:35px; text-align:right;">20</span></div></div>
+                <div class="setting-row"><span>1회 학습 문장 설정(수)</span><div style="display:flex; align-items:center; gap:10px;"><input type="range" id="setLimit" min="5" max="100" step="5" value="20" oninput="document.getElementById('limitVal').innerText=this.value"><span id="limitVal" style="font-weight:bold; color:var(--primary); width:35px; text-align:right;">20</span></div></div>
                 <div class="setting-row"><span>다음 문장 대기 시간(초)</span><div style="display:flex; align-items:center; gap:10px;"><input type="range" id="setWaitTime" min="1" max="10" step="1" value="3" oninput="document.getElementById('waitVal').innerText=this.value"><span id="waitVal" style="font-weight:bold; color:var(--primary); width:35px; text-align:right;">3</span></div></div>
             </div>
             <div class="modal-footer"><button class="btn-save" style="width:100%;" onclick="saveSettingsToDB(); closeOverlay('settingModal');">설정 저장</button></div>
