@@ -159,8 +159,8 @@
         }
         .mode-icon { width: 50px; height: 50px; border-radius: 50%; background: #f4f6f8; display: flex; justify-content: center; align-items: center; color: var(--primary); transition: 0.3s; }
 
-        /* 저장된 내 목소리가 있을 때 표시할 색상 클래스 */
-        .mode-btn.has-saved-voice .mode-icon { background: #ebd8b7; color: #b57a2a; }
+        /* 저장된 내 목소리가 있을 때 표시할 색상 클래스 (배경은 그대로, 아이콘 색상만 변경) */
+        .mode-btn.has-saved-voice .mode-icon { color: #b57a2a; }
 
         /* 버튼 작동 애니메이션 (has-saved-voice보다 아래 있어야 애니메이션 덮어쓰기가 원활함) */
         .mode-btn.recording .mode-icon { background: #ffebee; color: var(--danger); animation: pulse-record 1.5s infinite; }
@@ -1531,7 +1531,6 @@
         }
     }
 
-    // 🌟 2. 방금 녹음한 파일이 없어도 과거에 저장된 파일이 있으면 불러오기
     async function playMyVoice() { 
         if (isActionLocked) return; 
 
@@ -1539,17 +1538,14 @@
         let playTargetBlob = null;
         let isSavedVoiceMode = false;
 
-        // 우선순위 1: 지금 방금 녹음한 임시 파일 (audioUrl)
         if (audioUrl) {
             playTargetBlob = recordedBlob; 
         } 
-        // 우선순위 2: 과거에 버튼을 눌러 DB에 영구 저장된 파일 (s.savedVoice)
         else if (s && s.savedVoice) {
             playTargetBlob = s.savedVoice;
             isSavedVoiceMode = true;
         }
 
-        // 둘 중 하나라도 존재하면 플레이 진행
         if(playTargetBlob || audioUrl) {
             stopAllAudio();
             const currentSession = audioSessionId;
@@ -1560,7 +1556,6 @@
             const btnListening = document.getElementById('btnListening');
             btnListening.classList.add('listening');
 
-            // 재생할 파일의 URL 생성
             let playTargetUrl = audioUrl; 
             if (isSavedVoiceMode) {
                 playTargetUrl = URL.createObjectURL(playTargetBlob);
@@ -1568,7 +1563,6 @@
 
             currentAudio = new Audio(playTargetUrl);
             
-            // 만약 저장된 파일을 불러온 거라면, 파형을 그리기 위해 AudioBuffer 변환
             if (isSavedVoiceMode && isWaveformActive) {
                 try {
                     if (!audioCtx) initAudioContext();
@@ -1586,7 +1580,6 @@
                     currentAudio = null; 
                     isActionLocked = false;
                 }
-                // 메모리 누수 방지용 Blob URL 해제
                 if (isSavedVoiceMode) URL.revokeObjectURL(playTargetUrl);
             };
 
@@ -1598,7 +1591,6 @@
             const playPromise = currentAudio.play();
             if (playPromise !== undefined) playPromise.catch(error => release());
         } else { 
-            // 둘 다 없을 경우 기존 안내 메시지 출력
             showToast("먼저 'Speaking' 버튼을 눌러 목소리를 녹음해주세요."); 
         }
     }
