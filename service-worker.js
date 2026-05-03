@@ -1,4 +1,4 @@
-const InstallDate = 'owntalk-v2026-05-03-v4'; // 260430_플레시 화면변경|
+const InstallDate = 'owntalk-v2026-05-03-v5'; // 260430_플레시 화면변경|
 const CACHE_NAME = 'ai-english-pro-v1';
 // 오프라인에서 앱을 띄우기 위해 반드시 저장해야 하는 파일 목록
 const urlsToCache = [
