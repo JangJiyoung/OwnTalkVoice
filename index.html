@@ -500,7 +500,7 @@
         else if (!audioCtx) initAudioContext();
         ttsUnlocked = true;
         document.body.removeEventListener('click', unlockAudio);
-        document.body.removeEventListener('touchstart', unlockAudio);
+        document.body.removeEventListener('touchstart', unlockAudio, { passive: true });
     }
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio, { passive: true });
@@ -963,7 +963,6 @@
 
         if (isAlreadySelected) {
             hiddenInput.value = "";
-            // 토스트 알림을 제거했습니다.
         } else {
             btnElement.classList.add('selected');
             hiddenInput.value = categoryName;
@@ -1014,6 +1013,9 @@
                     if(p.length >= 2) list.push({ eng: p[0].trim(), kor: p.slice(1).join('/').trim(), importance: 1, isMemorized: false, category: '직접입력' }); 
                 }
                 
+                // 붙여넣기 한 여러 문장도 화면 출력 정렬(최신순)에 맞추기 위해 배열을 한 번 뒤집어 줍니다.
+                list.reverse(); 
+
                 if (list.length > 0) { await db.sentences.bulkAdd(list); showToast(`${list.length}개의 문장이 추가되었습니다.`); } 
                 else { showToast("추가할 문장을 찾지 못했습니다.\n'영어/한글' 형식을 확인해주세요."); return; }
 
@@ -1040,6 +1042,9 @@
                             }
                         }
                     });
+
+                    // 클라우드 데이터도 화면 출력 정렬에 맞추기 위해 배열을 한 번 뒤집어 줍니다.
+                    newSentences.reverse(); 
 
                     if (newSentences.length > 0) {
                         await db.sentences.bulkAdd(newSentences);
