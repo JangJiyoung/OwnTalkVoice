@@ -2,14 +2,14 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI English Study Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OwnTalk (나만의 스피킹 노트)</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="icon" type="image/png" href="icon.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="영어공부">
+    <meta name="apple-mobile-web-app-title" content="OwnTalk">
 
     <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
 
@@ -46,7 +46,7 @@
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { font-family: 'Pretendard', sans-serif; background: #eee; display: flex; justify-content: center; }
         
-        .app-container { width: 100%; max-width: 450px; background: var(--bg); position: relative; display: flex; flex-direction: column; height: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .app-container { width: 100%; max-width: 450px; background: var(--bg); position: relative; display: flex; flex-direction: column; height: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.1); margin: 0 auto; }
 
         #splashScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease-out; }
         
@@ -173,7 +173,8 @@
 
         #listContent { overflow: hidden; }
         .list-header { background: var(--bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; flex-shrink: 0; overflow: visible; z-index: 10; }
-        #sentenceList { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 90px; }
+        /* 하단 안전 영역 고려 */
+        #sentenceList { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)); }
         
         /* 커스텀 드롭다운 스타일 추가 */
         .custom-dropdown { position: relative; display: inline-block; user-select: none; }
@@ -196,7 +197,8 @@
         .sentence-card .list-eng.hidden { display: none !important; }
         .sentence-card .list-kor.hidden { display: none !important; }
         
-        .fab { position: absolute; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4); border: none; cursor: pointer; z-index: 20; }
+        /* 하단 안전 영역 고려 */
+        .fab { position: absolute; bottom: calc(25px + env(safe-area-inset-bottom, 0px)); right: 25px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4); border: none; cursor: pointer; z-index: 20; }
 
         .toast-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; z-index: 500; pointer-events: none; }
         .toast-box { background: rgba(0, 0, 0, 0.85); color: white; padding: 15px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transform: translateY(20px); opacity: 0; transition: 0.3s; white-space: pre-line; text-align: center; line-height: 1.5; max-width: 80%; }
@@ -476,7 +478,7 @@
                 </svg>
             </div>
             <div class="system-popup-text">
-                AI English Study Pro에서 오디오를 녹음하도록 허용하시겠습니까?
+                OwnTalk에서 오디오를 녹음하도록 허용하시겠습니까?
             </div>
             <button class="system-popup-btn" onclick="acceptMicGuide()">허용</button>
             <button class="system-popup-btn deny" onclick="closeOverlay('micGuideModal'); localStorage.setItem('initialPermissionFlowDone', 'true');">거부</button>
@@ -606,7 +608,7 @@
             waitSeconds = s.waitTime;
             
             if (s.lastStudyId && !s.random) {
-                let temp = [...rawSentences].reverse().filter(r => !r.isMemorized);
+                let temp = [...rawSentences].filter(r => !r.isMemorized);
                 if (s.priorityMode) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
                 let idx = temp.findIndex(r => r.id === s.lastStudyId);
                 if (idx !== -1) { studyOffset = idx; resumeOffset = true; }
@@ -710,7 +712,7 @@
         const enlargeKor = !isEngVisible && isKorVisible;
         const showCategory = document.getElementById('setShowCategoryInList').checked;
         
-        [...rawSentences].reverse().forEach((s) => {
+        [...rawSentences].forEach((s) => {
             const div = document.createElement('div'); div.className = 'sentence-card'; 
             div.innerHTML = `
                 <div style="flex: 1; overflow: hidden;">
@@ -882,7 +884,7 @@
                 rawSentences = await db.sentences.toArray(); 
             }
             
-            let temp = [...rawSentences].reverse().filter(r => !r.isMemorized); 
+            let temp = [...rawSentences].filter(r => !r.isMemorized); 
             if (document.getElementById('setPriority').checked) temp.sort((a, b) => (b.importance || 1) - (a.importance || 1));
             
             let idx = temp.findIndex(r => r.id === numId);
@@ -1042,8 +1044,6 @@
                     return; 
                 }
 
-                list.reverse(); 
-
                 if (list.length > 0) { 
                     await db.sentences.bulkAdd(list); 
                     showToast(`${list.length}개의 문장이 추가되었습니다.`); 
@@ -1076,8 +1076,6 @@
                         }
                     });
 
-                    newSentences.reverse(); 
-
                     if (newSentences.length > 0) {
                         await db.sentences.bulkAdd(newSentences);
                         showToast(`${newSentences.length}개의 문장이 [${categoryName}]에 추가되었습니다!`);
@@ -1106,7 +1104,7 @@
     async function applySettings(resetOffset = true) {
         if (resetOffset) studyOffset = 0; 
         
-        let temp = [...rawSentences].reverse().filter(s => !s.isMemorized); 
+        let temp = [...rawSentences].filter(s => !s.isMemorized); 
         
         if (currentStudyCategory) {
             temp = temp.filter(s => s.category === currentStudyCategory);
@@ -1948,6 +1946,15 @@
         flashcard.style.transform = `translateX(0px)`;
         flashcard.classList.remove('swiping');
         setTimeout(() => { isFcSwiping = false; }, 50);
+    });
+
+    // 화면 크기 변경 시 웨이브폼 캔버스 재조정
+    window.addEventListener('resize', () => {
+        if (isWaveformActive) {
+            drawIdleWaveform('nativeCanvas');
+            drawIdleWaveform('myCanvas');
+            syncDrawWaveforms();
+        }
     });
 
     window.addEventListener('DOMContentLoaded', () => {
