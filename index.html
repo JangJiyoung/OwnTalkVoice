@@ -43,10 +43,22 @@
 
         * { -webkit-tap-highlight-color: transparent; }
 
-        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
-        body { font-family: 'Pretendard', sans-serif; background: #eee; display: flex; justify-content: center; }
+        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; box-sizing: border-box; }
+        body { font-family: 'Pretendard', sans-serif; background: #eee; display: flex; justify-content: center; transition: background-color 0.3s; }
         
-        .app-container { width: 100%; max-width: 450px; background: var(--bg); position: relative; display: flex; flex-direction: column; height: 100%; box-shadow: 0 0 20px rgba(0,0,0,0.1); margin: 0 auto; }
+        /* 기본: 모바일 형태 레이아웃 */
+        .app-container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: var(--bg); 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+            margin: 0 auto; 
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
 
         #splashScreen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.4s ease-out; }
         
@@ -79,7 +91,6 @@
         #displayEng.hidden { display: none; }
         #displayKor { font-size: 17px; color: #777; transition: 0.2s; min-height: 25px; word-break: keep-all; }
         #displayKor.hidden { display: none; } 
-        /* 영문 Off 시 한글 크기 1.2배 (약 20.4px) 및 진하게 */
         #displayKor.enlarged { font-size: 20.4px; color: #333; margin-top: 5px; font-weight: 500; }
 
         #waveformContainer { width: 100%; display: none; flex-direction: column; gap: 8px; margin-top: 20px; margin-bottom: 10px; }
@@ -126,43 +137,17 @@
             pointer-events: none;
         }
 
-        .playback-row { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 25px; 
-            margin-bottom: 25px; 
-        }
+        .playback-row { display: flex; justify-content: center; align-items: center; gap: 25px; margin-bottom: 25px; }
         
         .btn-side { width: 60px; height: 60px; border-radius: 50%; border: none; background: #f4f6f8; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .btn-main { width: 75px; height: 75px; border-radius: 50%; border: none; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4); cursor: pointer; }
         
-        .mode-row { 
-            display: flex; 
-            justify-content: space-evenly; 
-            border-top: 1px solid #f0f0f0; 
-            padding-top: 25px; 
-        }
+        .mode-row { display: flex; justify-content: space-evenly; border-top: 1px solid #f0f0f0; padding-top: 25px; }
 
-        .mode-btn { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 8px; 
-            background: none; 
-            border: none; 
-            cursor: pointer; 
-            color: #777; 
-            font-size: 14px; 
-            font-weight: 600; 
-            width: 60px; 
-        }
+        .mode-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; color: #777; font-size: 14px; font-weight: 600; width: 60px; }
         .mode-icon { width: 50px; height: 50px; border-radius: 50%; background: #f4f6f8; display: flex; justify-content: center; align-items: center; color: var(--primary); transition: 0.3s; }
 
-        /* 저장된 내 목소리가 있을 때 표시할 색상 클래스 (배경은 그대로, 아이콘 색상만 변경) */
         .mode-btn.has-saved-voice .mode-icon { color: #b57a2a; }
-
-        /* 버튼 작동 애니메이션 */
         .mode-btn.recording .mode-icon { background: #ffebee; color: var(--danger); animation: pulse-record 1.5s infinite; }
         .mode-btn.listening .mode-icon { background: #e3f2fd; color: var(--primary); animation: pulse-listen 1.5s infinite; }
         .mode-btn.native .mode-icon { background: #e0f2f1; color: #009688; animation: pulse-native 1.5s infinite; }
@@ -173,10 +158,8 @@
 
         #listContent { overflow: hidden; }
         .list-header { background: var(--bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eaeaea; flex-shrink: 0; overflow: visible; z-index: 10; }
-        /* 하단 안전 영역 고려 */
         #sentenceList { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)); }
         
-        /* 커스텀 드롭다운 스타일 추가 */
         .custom-dropdown { position: relative; display: inline-block; user-select: none; }
         .dropdown-selected { font-size: 18px; color: #222; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 5px 0; }
         .dropdown-options { position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #eee; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 100; width: max-content; min-width: 150px; margin-top: 8px; overflow: hidden; }
@@ -190,14 +173,12 @@
         .sentence-card.swiping { background-color: #eef5fc; transform: scale(1); }
         .sentence-card strong { display: block; font-size: 16px; color: #222; margin-bottom: 8px; line-height: 1.4; pointer-events: none; }
         
-        /* 한글 텍스트 기본 및 확대 트랜지션 설정 */
         .list-kor { display: block; font-size: 14px; color: #666; line-height: 1.4; word-break: keep-all; pointer-events: none; transition: font-size 0.2s, color 0.2s; }
-        .list-kor.enlarged { font-size: 17px; color: #333; margin-top: 4px; } /* 1.2배 크기 적용 및 색상 진하게 */
+        .list-kor.enlarged { font-size: 17px; color: #333; margin-top: 4px; } 
         
         .sentence-card .list-eng.hidden { display: none !important; }
         .sentence-card .list-kor.hidden { display: none !important; }
         
-        /* 하단 안전 영역 고려 */
         .fab { position: absolute; bottom: calc(25px + env(safe-area-inset-bottom, 0px)); right: 25px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4); border: none; cursor: pointer; z-index: 20; }
 
         .toast-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; align-items: center; justify-content: center; z-index: 500; pointer-events: none; }
@@ -206,7 +187,9 @@
         .toast-overlay.active .toast-box { transform: translateY(0); opacity: 1; }
 
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
-        .modal { width: 88%; max-height: 90vh; background: white; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        /* 💡 수정됨: 모달(팝업) 넓은 화면 대응 (너무 커지지 않게 제한) */
+        .modal { width: 88%; max-width: 480px; max-height: 90vh; background: white; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
         .modal-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 18px; flex-shrink: 0; }
         .btn-x { background: transparent; border: none; width: 24px; height: 24px; font-size: 24px; color: #bbb; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; font-weight: 300; padding: 0; }
         .modal-body { padding: 10px 24px 20px; overflow-y: auto; flex: 1; }
@@ -246,13 +229,69 @@
         .system-popup-btn:active { background-color: #f0f0f0; }
         .system-popup-btn.deny { color: #555; }
 
-        /* 클라우드 카테고리 리스트용 스타일 추가 */
         .cloud-cat-btn { padding: 14px 16px; border: 1px solid #ddd; background: #fff; border-radius: 12px; text-align: left; font-size: 16px; cursor: pointer; transition: 0.2s; color: #333; margin-bottom: 8px; font-weight: 500; display: block; width: 100%; box-sizing: border-box; }
         .cloud-cat-btn:active { transform: scale(0.98); }
         .cloud-cat-btn.selected { background: #eef5fc; border-color: var(--primary); color: var(--primary); font-weight: bold; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.15); }
         @keyframes pulse-text { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         .loading-text { animation: pulse-text 1.5s infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* 💡 반응형 디스플레이(태블릿/폴더블/PC 넓은 화면) 핵심 레이아웃 분할 */
+        @media (min-width: 768px) {
+            body {
+                padding: 3vh 3vw; 
+                background-color: #dbe4ed; /* 바탕 화면이 보이도록 옅은 색 지정 */
+            }
+            .app-container {
+                max-width: 1200px;
+                width: 100%;
+                height: 100%;
+                border-radius: 32px; /* 플로팅 창 느낌 */
+                box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+                display: grid; /* Grid를 사용한 2단 분할 레이아웃 */
+                grid-template-columns: 380px 1fr;
+                grid-template-rows: auto 1fr;
+                grid-template-areas:
+                    "topbar topbar"
+                    "list study";
+            }
+            #splashScreen { border-radius: 32px; }
+            
+            .top-bar { grid-area: topbar; }
+            /* 넓은 화면에서는 두 탭이 모두 보이므로 탭 버튼 영역을 완전히 숨김 */
+            .tabs { display: none !important; } 
+            
+            #listContent {
+                grid-area: list;
+                display: flex !important; /* JS의 hidden 처리를 CSS로 강제 무시 */
+                border-right: 1px solid #eaeaea;
+                background-color: #f8fafc;
+            }
+            .list-header { background: #f8fafc; }
+            
+            #studyContent {
+                grid-area: study;
+                display: flex !important; /* JS의 hidden 처리를 CSS로 강제 무시 */
+                background-color: var(--bg);
+                padding: 40px;
+            }
+
+            /* 플래시 카드와 버튼들을 중앙으로 예쁘게 정렬 */
+            .flashcard {
+                max-width: 600px;
+                margin: 0 auto 30px auto;
+                min-height: 280px; 
+            }
+            .controls-layer {
+                max-width: 600px;
+                margin: auto auto 20px auto; /* 공간이 남으면 아래쪽으로 안착 */
+            }
+        }
+        @media (min-width: 1024px) {
+            .app-container {
+                grid-template-columns: 420px 1fr; /* 더 큰 화면에선 리스트도 조금 더 넓게 */
+            }
+        }
     </style>
 </head>
 <body>
@@ -633,7 +672,7 @@
         localStorage.setItem('initialPermissionFlowDone', 'true');
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => stream.getTracks().forEach(t => t.stop()))
-            .catch(e => console.log("마이크 권한 거부됨"));
+            .catch(e => console.log("마이크 권 거부됨"));
     }
 
     async function saveSettingsToDB() {
@@ -1005,16 +1044,14 @@
                 const list = [];
                 let hasError = false;
 
-                // 🌟 오늘 날짜 포맷팅 (YYYYMMDD 형식, 예: 20260503)
                 const today = new Date();
                 const dateString = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 
                 for (let l of lines) { 
-                    if(!l.trim()) continue; // 빈 줄은 무시
+                    if(!l.trim()) continue; 
                     const p = l.split('/'); 
                     
                     if (p.length >= 3) {
-                        // 카테고리/영어/한글 형식인 경우
                         list.push({ 
                             category: p[0].trim(),
                             eng: p[1].trim(), 
@@ -1023,7 +1060,6 @@
                             isMemorized: false 
                         }); 
                     } else if (p.length === 2) {
-                        // 카테고리 없이 영어/한글 형식만 있는 경우 (오늘 날짜 부여)
                         list.push({ 
                             category: dateString,
                             eng: p[0].trim(), 
@@ -1032,13 +1068,11 @@
                             isMemorized: false 
                         }); 
                     } else {
-                        // 슬래시가 없거나 형식이 전혀 맞지 않는 경우
                         hasError = true;
                         break; 
                     }
                 }
                 
-                // 🌟 형식 오류가 하나라도 발견되면 중단
                 if (hasError) {
                     showToast("문장이 보기와 같지 않습니다 다시한번 확인해 주세요");
                     return; 
@@ -1948,7 +1982,6 @@
         setTimeout(() => { isFcSwiping = false; }, 50);
     });
 
-    // 화면 크기 변경 시 웨이브폼 캔버스 재조정
     window.addEventListener('resize', () => {
         if (isWaveformActive) {
             drawIdleWaveform('nativeCanvas');
